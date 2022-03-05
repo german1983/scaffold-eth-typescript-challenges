@@ -1,22 +1,22 @@
-pragma solidity >=0.8.0 <0.9.0;
+pragma solidity ^0.8.12;
 //SPDX-License-Identifier: MIT
 
-// import "hardhat/console.sol";
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 
-//learn more: https://docs.openzeppelin.com/contracts/3.x/erc721
-
-// GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
-
-contract YourCollectible is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+/**
+ * For users that don't have any NFT to associate to the container
+ * or simple because they want some new NFT, we'll have a mintable NFT available
+ */
+/** THIS IS JUST A BASIC IMPLEMENTATION USING SCAFFOLD-ETH Examples */
+contract TamaNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
-  constructor() public ERC721('YourCollectible', 'YCB') {}
+  constructor() ERC721('TamaNFT', 'TNFT') {}
 
   function _baseURI() internal view virtual override returns (string memory) {
     return 'https://ipfs.io/ipfs/';
@@ -42,12 +42,12 @@ contract YourCollectible is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable 
     return super.tokenURI(tokenId);
   }
 
-  function mintItem(address to, string memory tokenURI) public returns (uint256) {
+  function mintItem(address to, string memory tokenURIInput) public returns (uint256) {
     _tokenIds.increment();
 
     uint256 id = _tokenIds.current();
     _mint(to, id);
-    _setTokenURI(id, tokenURI);
+    _setTokenURI(id, tokenURIInput);
 
     return id;
   }
