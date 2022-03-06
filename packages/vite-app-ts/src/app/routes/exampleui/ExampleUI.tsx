@@ -13,6 +13,7 @@ import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { Tamagotchi } from './components/Tamagotchi';
+import './styles.less';
 
 export interface IExampleUIProps {
   mainnetProvider: StaticJsonRpcProvider;
