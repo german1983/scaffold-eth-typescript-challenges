@@ -36,25 +36,44 @@ export const MainPageContracts: FC<IMainPageContractsProps> = (props) => {
           and give you a form to interact with it locally
         ********** */}
         <GenericContract
-          contractName="YourCollectible"
-          contract={contractList?.['YourCollectible']}
+          contractName="TamaToken"
+          contract={contractList?.['TamaToken']}
           mainnetProvider={props.scaffoldAppProviders.mainnetProvider}
           blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
           contractConfig={props.appContractConfig}
         />
 
-        {/* **********
-         * ❓ uncomment for a second contract:
-         ********** */}
-        {/*
-          <GenericContract
-            contractName="SecondContract"
-            contract={contract={contractList?.['SecondContract']}
-            mainnetProvider={props.appProviders.mainnetProvider}
-            blockExplorer={props.appProviders.targetNetwork.blockExplorer}
-            contractConfig={props.contractConfig}
-          />
-        */}
+        <GenericContract
+          contractName="TamaDEX"
+          contract={contractList?.['TamaDEX']}
+          mainnetProvider={props.scaffoldAppProviders.mainnetProvider}
+          blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
+          contractConfig={props.appContractConfig}
+        />
+
+        <GenericContract
+          contractName="TamaFriend"
+          contract={contractList?.['TamaFriend']}
+          mainnetProvider={props.scaffoldAppProviders.mainnetProvider}
+          blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
+          contractConfig={props.appContractConfig}
+        />
+
+        <GenericContract
+          contractName="TamaContainer"
+          contract={contractList?.['TamaContainer']}
+          mainnetProvider={props.scaffoldAppProviders.mainnetProvider}
+          blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
+          contractConfig={props.appContractConfig}
+        />
+
+        <GenericContract
+          contractName="TamaCollectibles"
+          contract={contractList?.['TamaCollectibles']}
+          mainnetProvider={props.scaffoldAppProviders.mainnetProvider}
+          blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
+          contractConfig={props.appContractConfig}
+        />
       </>
     </>
   );

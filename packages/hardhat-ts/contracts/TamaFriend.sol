@@ -12,11 +12,11 @@ import '@openzeppelin/contracts/access/Ownable.sol';
  * or simple because they want some new NFT, we'll have a mintable NFT available
  */
 /** THIS IS JUST A BASIC IMPLEMENTATION USING SCAFFOLD-ETH Examples */
-contract TamaNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract TamaFriend is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
-  constructor() ERC721('TamaNFT', 'TNFT') {}
+  constructor() ERC721('TamaFriend', 'TNFT') {}
 
   function _baseURI() internal view virtual override returns (string memory) {
     return 'https://ipfs.io/ipfs/';

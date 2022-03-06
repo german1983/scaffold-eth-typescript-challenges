@@ -45,7 +45,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironmentExtended) => {
   await tamaDEX.init("" + (3 * 10 ** 18), { value: ethers.utils.parseEther('3'), gasLimit: 200000 })
 
 
-  await deploy("TamaNFT", {
+  await deploy("TamaFriend", {
     from: deployer,
     log: true,
   });
@@ -53,4 +53,4 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironmentExtended) => {
 };
 
 export default func;
-func.tags = ['TamaCollectibles', 'TamaContainer', 'TamaDEX', 'TamaToken', 'TamaNFT'];
+func.tags = ['TamaCollectibles', 'TamaContainer', 'TamaDEX', 'TamaToken', 'TamaFriend'];

@@ -21,7 +21,7 @@ import { subgraphUri } from '~~/config/subgraphConfig';
 import { useEthersContext } from 'eth-hooks/context';
 import { NETWORKS } from '~~/models/constants/networks';
 import { mainnetProvider } from '~~/config/providersConfig';
-import { YourCollectible } from '~~/generated/contract-types';
+// import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 
@@ -63,7 +63,7 @@ export const Main: FC = () => {
   // -----------------------------
   // example for current contract and listners
   // -----------------------------
-  const yourCollectibleRead = readContracts['YourCollectible'] as YourCollectible;
+  // const yourCollectibleRead = readContracts['YourCollectible'] as YourCollectible;
 
   // For more hooks, check out 🔗eth-hooks at: https://www.npmjs.com/package/eth-hooks
 
