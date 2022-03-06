@@ -12,6 +12,7 @@ import { useContractLoader, useContractReader, useEventListener, useGasPrice } f
 import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
+import { Tamagotchi } from './components/Tamagotchi';
 
 export interface IExampleUIProps {
   mainnetProvider: StaticJsonRpcProvider;
