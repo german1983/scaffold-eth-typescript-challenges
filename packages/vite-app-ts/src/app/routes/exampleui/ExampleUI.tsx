@@ -2,7 +2,7 @@ import { SyncOutlined } from '@ant-design/icons';
 import { formatEther, parseEther } from '@ethersproject/units';
 import { Button, Card, DatePicker, Divider, Input, List, Progress, Slider, Spin, Switch } from 'antd';
 import { Signer, Contract } from 'ethers';
-import React, { useState, FC, useContext, useEffect } from 'react';
+import React, { useState, FC, useContext, useEffect, useRef, ReactElement } from 'react';
 import { Shape1 } from './components/Shape1';
 import { Shape2 } from './components/Shape2';
 import { GameMenu } from './components/GameMenu';
@@ -17,6 +17,10 @@ import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { Tamagotchi } from './components/Tamagotchi';
 import './styles.less';
+import { storeExampleNFT } from './utils';
+import { TamaController } from '~~/generated/contract-types';
+import { targetNetworkInfo } from '~~/config/providersConfig';
+import ReactDOMServer from 'react-dom/server';
 
 const basicColorSetup = {
   backColor: '3ca9de',
@@ -50,10 +54,9 @@ export interface IExampleUIProps {
 export const ExampleUI: FC<IExampleUIProps> = (props) => {
   const [newPurpose, setNewPurpose] = useState('loading...');
   const ethersContext = useEthersContext();
-
   const appContractConfig = useAppContracts();
   const readContracts = useContractLoader(appContractConfig);
-  const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer);
+  const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);
 
   const yourContractRead = readContracts['YourContract'] as any;
   const yourContractWrite = writeContracts['YourContract'] as any;
@@ -72,6 +75,7 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
   const [buttonColor, setButtonColor] = useState(basicColorSetup.buttonColor);
   const [lineColor, setLineColor] = useState(basicColorSetup.lineColor);
   const [shapeList, setShapeList] = useState(initialShapesArray);
+  const TamaControllerWrite = writeContracts['TamaController'] as TamaController;
 
   /*
   TODO : 
@@ -87,10 +91,12 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
 
   const [currentShape, setCurrentShape] = useState(shapes.SHAPE2);
 
+  const toMint = useRef<any>();
+  toMint.current = currentShape;
+
   const ethComponentsSettings = useContext(EthComponentsSettingsContext);
   const gasPrice = useGasPrice(ethersContext.chainId, 'fast');
   const tx = transactor(ethComponentsSettings, ethersContext?.signer, gasPrice);
-  const { mainnetProvider, yourCurrentBalance, price } = props;
   // const ScaffoldListener = useScaffoldHooks(scaffoldAppProviders, readContracts, writeContracts, mainnetContracts)
 
   const [connected, connect] = useState(false);
@@ -100,6 +106,29 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
     else connect(false);
   }, [ethersContext.account]);
 
+  const mintConsole = async () => {
+    if (!tx || !ethersContext.account) return;
+
+    // upload to ipfs
+    var myComponent = ReactDOMServer.renderToString(renderShape(toMint.current))
+    const uploaded = await storeExampleNFT(myComponent); // TODO replace with real options selected by the user
+    console.log('Uploaded Hash: ', uploaded);
+    await tx(TamaControllerWrite.mintItem(uploaded), (update) => {
+      console.log('📡 Transaction Update:', update);
+      if (update && (update.status === 'confirmed' || update.status === 1)) {
+        console.log(' 🍾 Transaction ' + update.hash + ' finished!');
+        console.log(
+          ' ⛽️ ' +
+          update.gasUsed +
+          '/' +
+          (update.gasLimit || update.gas) +
+          ' @ ' +
+          parseFloat(update.gasPrice) / 1000000000 +
+          ' gwei'
+        );
+      }
+    });
+  };
   const renderShape = (value: any) => {
     if (value == shapes.SHAPE1) {
       return (
@@ -127,6 +156,9 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
     <div className="mainWrapper">
       <div className="tamaWrapper">{renderShape(currentShape)}</div>
       <div className="menuWrapper">
+        <div className='menuTitle'>
+          MENU
+        </div>
         <GameMenu
           backColor={backColor}
           setBackColor={setBackColor}
@@ -141,6 +173,10 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
           shapeList={shapeList}
           setCurrentShape={setCurrentShape}
           currentShape={currentShape}></GameMenu>
+        <div className='mintButton'
+        onClick={async()=>{await mintConsole()}}>
+          MINT
+        </div>
       </div>
     </div>
   ) : (

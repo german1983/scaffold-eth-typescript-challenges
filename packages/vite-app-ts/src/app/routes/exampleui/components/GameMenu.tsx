@@ -104,7 +104,7 @@ export const GameMenu: FC<IMenu> = (props) => {
 
   return (
     <div className="main">
-      <div>Available Shapes</div>
+      <div className='submenu'>Available Shapes</div>
       <div>
         <div>
           <ul className="ul1">
@@ -116,7 +116,7 @@ export const GameMenu: FC<IMenu> = (props) => {
           </ul>
         </div>
       </div>
-      <div>Choose colors</div>
+      <div className= 'submenu'>Choose colors</div>
       <ul className="ul2">
         <li>
           <label>Back Shape</label>
@@ -166,7 +166,7 @@ export const GameMenu: FC<IMenu> = (props) => {
             }}></input>
         </li>
       </ul>
-      <div>Learn how to play</div>
+      <div className='submenu'>Learn how to play</div>
     </div>
   );
 };
