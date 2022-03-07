@@ -1,5 +1,5 @@
 import { useState, useEffect, FC } from 'react';
-
+import { Shape1 } from './Shape1';
 export interface ITamagotchi {
   title: any;
 }
@@ -17,7 +17,7 @@ export const Tamagotchi: FC<ITamagotchi> = (props) => {
             fill="#3ca9de"
             stroke="#2472b4"
             stroke-miterlimit="10"
-            stroke-width='2'
+            stroke-width="2"
           />
           <path
             d="M47.06,10.06C16.47,11.5-.25,57.75,8.54,90,22,140.72,93.29,130.66,98.89,90,105.66,52.31,82,4.87,47.06,10.06Z"
@@ -32,7 +32,7 @@ export const Tamagotchi: FC<ITamagotchi> = (props) => {
             stroke="#2273b5"
             stroke-linecap="round"
             stroke-miterlimit="10"
-            stroke-width='2'
+            stroke-width="2"
           />
         </g>
         <g id="bottoni">
@@ -69,7 +69,7 @@ export const Tamagotchi: FC<ITamagotchi> = (props) => {
         stroke="#2273b5"
         stroke-linecap="round"
         stroke-miterlimit="10"
-        stroke-width='2'
+        stroke-width="2"
       />
       {/* <path
         id="schermo-riflesso"
