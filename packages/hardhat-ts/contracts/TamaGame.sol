@@ -1,62 +1,44 @@
 pragma solidity ^0.8.12;
 //SPDX-License-Identifier: MIT
 
+import "./character.sol";
+import "./Safemath.sol";
 
 
-
-contract TamaActions  {
+contract TamaGame  {
 //to do: add events for a log
 
-//thinking this is what the character struct will look like
-//ipfsURL is there so we can swap it during upgrade function
+using SafeMath for uint;
+
+mapping(address => Character) private characters;
+
+//ipfsURL could potentially be swapped on lvl up
 //lvl will be based on xp total -- lvl 1 = xp > 10, lvl 2 xp > 20 and so on
-//the character will be able to be upgraded once it reaches certain exp thresshold
+//the character will be able to be upgraded once it reaches certain exp threshhold
 //hungry may need to be offchain, even tho its a state it might be expensive
 
-uint256 characterID; 
 bool public hungry;
-
-struct Character {
-    uint xp; 
-
-    bool hungry;
-
-}
-
-Character[] public characters;
-
-
-
-
 uint foodCounter = block.timestamp + 6 hours;
 uint hungryCounter = block.timestamp + 12 hours;
 
 //give char stats
-function createCharacter () public returns(uint, uint, bool)  {
- 
-    uint xp=0;
-    hungry=false;
-    characters.push(
-            Character(
-                xp,
-                hungry
-            )
-            );
-            return (characterID, characters[characterID].xp, characters[characterID].hungry);
-//characters start with static values for hp/dmg/exp
+function createCharacter (string memory name) public { 
+   characters[msg.sender] = new Character(name);
+
+   
 } 
 
 
 //eventually this will consume an item
 //currently each food gives 5 exp
 function feed() 
-public returns (uint256) {  
+public returns (uint) {     
+uint oldXP = characters[msg.sender].getXP();
+uint newXP = oldXP.add(2);
 
-    
-
-characters[characterID].xp = characters[characterID].xp + 5;
-    characters[characterID].hungry = !characters[characterID].hungry;
-    return (characters[characterID].xp);    
+characters[msg.sender].addXP();
+return characters[msg.sender].getXP();
+       
 }
 
 //this function will check for level and let the user upgrade their character 
