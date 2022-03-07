@@ -2,7 +2,10 @@ pragma solidity ^0.8.12;
 //SPDX-License-Identifier: MIT
 
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
 import '@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol';
+import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
 
 /**
@@ -12,7 +15,40 @@ import '@openzeppelin/contracts/access/Ownable.sol';
  */
 /** SHOULD WE CONSIDER USING ERC1155 fot the containers as well? */
 /** We might want to take a lok at Covalient API (FREE) or NFT Port to get details from NFTs to be added to the Container */
-contract TamaContainer is ERC721('TamaContainer', 'TAMC'), IERC1155Receiver, Ownable {
+contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, ERC721URIStorage, IERC1155Receiver, Ownable {
+  using Counters for Counters.Counter;
+  Counters.Counter private _tokenIds;
+
+  function _beforeTokenTransfer(
+    address from,
+    address to,
+    uint256 tokenId
+  ) internal override(ERC721, ERC721Enumerable) {
+    super._beforeTokenTransfer(from, to, tokenId);
+  }
+
+  function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable, IERC165) returns (bool) {
+    return super.supportsInterface(interfaceId);
+  }
+
+  function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    super._burn(tokenId);
+  }
+
+  function mintItem(string memory tokenURIAssigned) public returns (uint256) {
+    _tokenIds.increment();
+
+    uint256 id = _tokenIds.current();
+    _mint(msg.sender, id);
+    _setTokenURI(id, tokenURIAssigned);
+
+    return id;
+  }
+
+  function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
+    return super.tokenURI(tokenId);
+  }
+
   /**
    * @dev Handles the receipt of a single ERC1155 token type. This function is
    * called at the end of a `safeTransferFrom` after the balance has been updated.

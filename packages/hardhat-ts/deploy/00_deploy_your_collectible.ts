@@ -14,7 +14,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironmentExtended) => {
     log: true,
   });
 
-  await deploy('TamaContainer', {
+  await deploy('TamaController', {
     from: deployer,
     // args: ["Hello"],
     log: true,
@@ -53,4 +53,4 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironmentExtended) => {
 };
 
 export default func;
-func.tags = ['TamaCollectibles', 'TamaContainer', 'TamaDEX', 'TamaToken', 'TamaFriend'];
+func.tags = ['TamaCollectibles', 'TamaController', 'TamaDEX', 'TamaToken', 'TamaFriend'];

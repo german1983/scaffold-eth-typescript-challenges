@@ -24,6 +24,7 @@ import { mainnetProvider } from '~~/config/providersConfig';
 // import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
+import { TamaControllers } from '../my-mint/TamaController';
 
 export const DEBUG = false;
 
@@ -102,6 +103,13 @@ export const Main: FC = () => {
         <Switch>
           <Route exact path="/">
             <YourCollectibles
+              mainnetProvider={scaffoldAppProviders.mainnetProvider}
+              blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
+              tx={tx}
+            />
+          </Route>
+          <Route exact path="/tamacontroller">
+            <TamaControllers
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
               tx={tx}

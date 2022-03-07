@@ -32,6 +32,15 @@ export const MainPageMenu: FC<IMainPageMenuProps> = (props) => (
         Debug Contract
       </Link>
     </Menu.Item>
+    <Menu.Item key="/tamacontroller">
+      <Link
+        onClick={() => {
+          props.setRoute('/tamacontroller');
+        }}
+        to="/tamacontroller">
+        My Tama Controller
+      </Link>
+    </Menu.Item>
     <Menu.Item key="/hints">
       <Link
         onClick={() => {
