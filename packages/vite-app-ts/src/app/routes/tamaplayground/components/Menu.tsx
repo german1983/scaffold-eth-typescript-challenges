@@ -36,7 +36,7 @@ interface IMenu {
   setLineColor: any;
   shapeList: Array<IShapeObject>;
   setCurrentShape: any;
-  currentShape: any
+  currentShape: any;
 }
 export const GameMenu: FC<IMenu> = (props) => {
   const [newPurpose, setNewPurpose] = useState('loading...');
@@ -78,7 +78,7 @@ export const GameMenu: FC<IMenu> = (props) => {
     setLineColor,
     shapeList,
     setCurrentShape,
-    currentShape
+    currentShape,
   } = props;
 
   useEffect(() => {
@@ -109,23 +109,21 @@ export const GameMenu: FC<IMenu> = (props) => {
 
   const changeShape = (id: any) => {
     setCurrentShape(id);
-  }
+  };
 
   return (
     <div className="main">
-      <div className='submenu'>Available Shapes</div>
+      <div className="submenu">Available Shapes</div>
       <div>
         <div>
           <ul className="ul1">
             {shapeList.map((item) => {
-              return (
-                <img className="container-console" src={item.image} onClick={() => changeShape(item.id)}/>
-              );
+              return <img className="container-console" src={item.image} onClick={() => changeShape(item.id)} />;
             })}
           </ul>
         </div>
       </div>
-      <div className='submenu'>Choose colors</div>
+      <div className="submenu">Choose colors</div>
       <ul className="ul2">
         <li>
           <label>Back Shape</label>
@@ -175,7 +173,7 @@ export const GameMenu: FC<IMenu> = (props) => {
             }}></input>
         </li>
       </ul>
-      <div className='submenu'>Learn how to play</div>
+      <div className="submenu">Learn how to play</div>
     </div>
   );
 };
