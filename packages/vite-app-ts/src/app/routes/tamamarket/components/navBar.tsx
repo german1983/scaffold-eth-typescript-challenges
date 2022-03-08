@@ -28,7 +28,7 @@ export const NavBar: FC<INavBar> = (props) => {
   };
   return (
     <div className="container--navigation">
-      {marketFields.map((item, i) => {
+      {marketFields.map((item: any, i: number) => {
         return item.isActive ? (
           <div
             className="item--link active"
