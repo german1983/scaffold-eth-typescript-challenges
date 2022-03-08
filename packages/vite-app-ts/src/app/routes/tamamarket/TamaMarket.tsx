@@ -87,7 +87,7 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
     setSearchResults(dataFromNFTPort);
     setSearchInput('');
     setButtonSearch('Go!');
-    console.log(dataFromNFTPort);
+    console.log('fetched data',dataFromNFTPort);
   }
 
   return (
@@ -98,10 +98,10 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
           <img className="invert" src={marketLogo} />
         </div>
         <div className="wrapper">
-          <label className='searchLabel'> Search Here :
-          <input className="search" type="text" value={searchInput} onChange={(event) => setSearchInput(event.target.value)}/>
+          <div className='searchLabel'>
+          <input className="search" placeholder='SEARCH IN NFT PORT' type="text" value={searchInput} onChange={(event) => setSearchInput(event.target.value)}/>
           <input className="submit" type="submit" value={buttonSearch} onClick={async () => {onHandleSearch(searchInput)}}/>
-          </label>
+          </div>
         </div>
         <NavBar marketFields={marketFields} setSearchFilter={setSearchFilter}></NavBar>
         <ResultsBox resultList={searchResults}></ResultsBox>
