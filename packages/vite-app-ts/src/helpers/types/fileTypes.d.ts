@@ -24,6 +24,11 @@ declare module '*.module.styl' {
   export default classes;
 }
 
+declare module '*.png' {
+  const value: any;
+  export = value;
+}
+
 /* CSS */
 declare module '*.css';
 declare module '*.scss';
