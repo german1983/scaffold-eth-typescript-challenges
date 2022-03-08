@@ -2,6 +2,9 @@
   "name": "@scaffold-eth/services",
   "version": "1.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "submodule-init": "git submodule init && git submodule update --remote",
     "arbitrum-init": "cd arbitrum && git submodule init && git submodule update && yarn install",

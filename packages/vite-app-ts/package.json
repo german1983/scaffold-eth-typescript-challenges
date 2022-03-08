@@ -2,6 +2,9 @@
   "name": "@scaffold-eth/vite-app",
   "version": "0.2.1",
   "license": "MIT",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "start": "cross-env ENVIRONMENT=DEVELOPMENT vite",
     "build": "tsc && yarn build:anttheme && cross-env ENVIRONMENT=PRODUCTION vite build",
