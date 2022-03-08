@@ -33,13 +33,12 @@ function createCharacter (string memory name) public {
 //currently each food gives 5 exp
 function feed() 
 public returns (uint) {     
-uint oldXP = characters[msg.sender].getXP();
-uint newXP = oldXP.add(2);
 
-characters[msg.sender].addXP();
-return characters[msg.sender].getXP();
+return characters[msg.sender].addXP();
        
 }
+
+
 
 //this function will check for level and let the user upgrade their character 
 
