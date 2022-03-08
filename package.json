@@ -1,6 +1,9 @@
 {
    "name": "@scaffold-eth/typescript",
    "version": "0.2.0",
+   "engines": {
+      "node": "16.x"
+   },
    "keywords": [
       "ethereum",
       "react",
@@ -50,7 +53,7 @@
       "deploy-and-graph": "yarn deploy && yarn graph-ship-local",
       "theme": "yarn workspace @scaffold-eth/react-app theme",
       "watch-theme": "yarn workspace @scaffold-eth/react-app watch",
-      "backend": "cd packages/backend && node index"
+      "backend": "cd packages/backend && npm run start"
    },
    "workspaces": {
       "packages": [
