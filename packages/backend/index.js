@@ -40,12 +40,12 @@ if (fs.existsSync('server.key') && fs.existsSync('server.cert')) {
     https.createServer({
         key: fs.readFileSync('server.key'),
         cert: fs.readFileSync('server.cert')
-    }, app).listen(5010, 'localhost', () => {
-        console.log('HTTPS Listening: 5010')
+    }, app).listen(3000, 'localhost', () => {
+        console.log('HTTPS Listening: 3000')
     })
 } else {
     console.log("Starting server without keys");
-    var server = app.listen(5010, function () {
+    var server = app.listen(3000, function () {
         console.log("HTTP Listening on port:", server.address().address, server.address().port);
     });
 }
