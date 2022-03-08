@@ -2,14 +2,21 @@ import { FC, useEffect, useRef, useState } from 'react';
 import './resultsBox.less';
 import sampleImage from '../tama-logo.png';
 import { Redirect } from 'react-router-dom';
+
+interface ResultBoxObject {
+  price: string;
+  title: string;
+  description: string;
+}
+
 export interface IResultsBox {
-  resultList: Array<Object>;
+  resultList: Array<ResultBoxObject>;
 }
 export const ResultsBox: FC<IResultsBox> = (props) => {
   const { resultList } = props;
   const [reRender, setReRender] = useState(0);
   const [beginIndex, setBeginIndex] = useState(0);
-  const render = useRef();
+  const render = useRef<number>(0);
   render.current = reRender;
 
   useEffect(() => {
