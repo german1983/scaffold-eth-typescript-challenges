@@ -33,10 +33,12 @@ var initialShapesArray: Array<IShapeObject> = [
   {
     name: 'Oval',
     id: shapes.SHAPE1,
+    image: ""
   },
   {
     name: 'Whatever',
     id: shapes.SHAPE2,
+    image: ""
   },
 ];
 export interface IExampleUIProps {

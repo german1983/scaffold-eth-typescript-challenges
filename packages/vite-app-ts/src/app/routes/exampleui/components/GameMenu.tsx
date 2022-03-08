@@ -21,7 +21,7 @@ export enum shapes {
 export interface IShapeObject {
   id: shapes;
   name: string;
-  image: string;
+  image: string | undefined;
 }
 
 interface IMenu {

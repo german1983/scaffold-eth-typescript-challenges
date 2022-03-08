@@ -1,3 +1,5 @@
+import { ResultBoxObject } from "./components/resultsBox";
+
 export const sampleMarketFields = [
   {
     name: 'Food',
@@ -25,7 +27,7 @@ export const sampleMarketFields = [
     isActive: false,
   },
 ];
-export const sampleSearchResults = [
+export const sampleSearchResults: Array<ResultBoxObject> = [
   {
     id: 0,
     title: 'Hi',

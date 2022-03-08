@@ -72,22 +72,22 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
     else setSearchResults(sampleSearchResults2);
   }, [marketFields]);
 
-  const onHandleSearch = async (input : String) =>{
+  const onHandleSearch = async (input: String) => {
     setButtonSearch('Wait !')
     let dataFromNFTPort = await fetchFromNFTPort(input);
-    dataFromNFTPort = dataFromNFTPort.filter(item=>checkFormat(item));
-    dataFromNFTPort = dataFromNFTPort.map((item) => {
+    dataFromNFTPort = dataFromNFTPort.filter((item: any) => checkFormat(item));
+    dataFromNFTPort = dataFromNFTPort.map((item: any) => {
       return {
         ...item,
-        url : item.cached_file_url,
-        title : item .name, 
-        description : '' 
+        url: item.cached_file_url,
+        title: item.name,
+        description: ''
       }
     })
     setSearchResults(dataFromNFTPort);
     setSearchInput('');
     setButtonSearch('Go!');
-    console.log('fetched data',dataFromNFTPort);
+    console.log('fetched data', dataFromNFTPort);
   }
 
   return (
@@ -99,8 +99,8 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
         </div>
         <div className="wrapper">
           <div className='searchLabel'>
-          <input className="search" placeholder='SEARCH IN NFT PORT' type="text" value={searchInput} onChange={(event) => setSearchInput(event.target.value)}/>
-          <input className="submit" type="submit" value={buttonSearch} onClick={async () => {onHandleSearch(searchInput)}}/>
+            <input className="search" placeholder='SEARCH IN NFT PORT' type="text" value={searchInput} onChange={(event) => setSearchInput(event.target.value)} />
+            <input className="submit" type="submit" value={buttonSearch} onClick={async () => { onHandleSearch(searchInput) }} />
           </div>
         </div>
         <NavBar marketFields={marketFields} setSearchFilter={setSearchFilter}></NavBar>

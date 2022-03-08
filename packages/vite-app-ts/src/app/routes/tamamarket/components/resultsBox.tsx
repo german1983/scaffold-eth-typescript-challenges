@@ -3,10 +3,12 @@ import './resultsBox.less';
 import sampleImage from '../tama-logo.png';
 import { Redirect } from 'react-router-dom';
 
-interface ResultBoxObject {
-  price: string;
+export interface ResultBoxObject {
+  id: number;
+  price?: number;
   title: string;
   description: string;
+  url?: string;
 }
 
 export interface IResultsBox {
