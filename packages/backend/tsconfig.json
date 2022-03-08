@@ -1,0 +1,47 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "lib": [
+            "es2017",
+            "esnext.asynciterable"
+        ],
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/types"
+        ],
+        "sourceMap": true,
+        "allowJs": false,
+        "declarationMap": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": false,
+        "forceConsistentCasingInFileNames": true,
+        "module": "es2020",
+        "moduleResolution": "node",
+        "incremental": true,
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "rootDir": ".",
+        "baseUrl": ".",
+        "outDir": "./build",
+        "emitDecoratorMetadata": true,
+        "pretty": true,
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        }
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "tests"
+    ]
+}
