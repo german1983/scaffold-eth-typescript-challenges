@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import routes from '@/api';
-import config from '@/config';
+import routes from '../../api';
+import config from '../../config';
 export default ({ app }: { app: express.Application }) => {
     /**
      * Health Check endpoints
@@ -26,7 +26,7 @@ export default ({ app }: { app: express.Application }) => {
     // Some sauce that always add since 2014
     // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."
     // Maybe not needed anymore ?
-    app.use(require('method-override')());
+    // app.use(require('method-override')());
 
     // Transforms the raw string of req.body into json
     app.use(express.json());

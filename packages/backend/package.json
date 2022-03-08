@@ -6,10 +6,13 @@
         "node": "16.x"
     },
     "main": "src/app.ts",
+    "type": "module",
     "scripts": {
         "build": "tsc",
         "heroku-postbuild": "npm run build",
-        "start": "nodemon"
+        "start": "node --experimental-specifier-resolution=node --loader ts-node/esm src/app.ts",
+        "start2": "ts-node src/app.ts",
+        "dev": "nodemon -x ts-node src/config/server.ts"
     },
     "dependencies": {
         "cors": "2.8.5",
