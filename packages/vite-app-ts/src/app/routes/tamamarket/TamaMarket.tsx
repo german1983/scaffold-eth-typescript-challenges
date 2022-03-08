@@ -2,7 +2,7 @@ import { SyncOutlined } from '@ant-design/icons';
 import { formatEther, parseEther } from '@ethersproject/units';
 import { Button, Card, DatePicker, Divider, Input, List, Progress, Slider, Spin, Switch } from 'antd';
 import { Signer, Contract } from 'ethers';
-import React, { useState, FC, useContext } from 'react';
+import React, { useState, FC, useContext, useEffect } from 'react';
 
 import { Address, Balance } from 'eth-components/ant';
 import { transactor, TTransactor } from 'eth-components/functions';
@@ -13,7 +13,11 @@ import { useContractLoader, useContractReader, useEventListener, useGasPrice } f
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 // import { Tamagotchi } from './components/Tamagotchi';
+import { sampleMarketFields, sampleSearchResults,  sampleSearchResults2 } from './sampleData';
+import marketLogo from './tama-logo.png';
 import './styles.less';
+import { NavBar } from './components/navBar';
+import { ResultsBox } from './components/resultsBox';
 
 export interface ITamaMarketProps {
   mainnetProvider: StaticJsonRpcProvider;
@@ -45,14 +49,37 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
   const tx = transactor(ethComponentsSettings, ethersContext?.signer, gasPrice);
 
   const { mainnetProvider, yourCurrentBalance, price } = props;
+  const [marketFields, setMarketFields] = useState(sampleMarketFields);
+  const [searchResults, setSearchResults] = useState(sampleSearchResults);
+  const [searchFilter, setSearchFilter] = useState(marketFields[0].name);
 
+  useEffect(()=>{
+    let newFields = marketFields.map((item)=>{
+      return {
+        ...item,
+        isActive : item.name != searchFilter ? false : true,
+    }});
+    setMarketFields(newFields);
+  },[searchFilter]);
+
+  useEffect(()=> {
+    if(marketFields[0].isActive) setSearchResults(sampleSearchResults)
+    else setSearchResults(sampleSearchResults2)
+  },[marketFields])
   return (
-    <div className='mainWrapper'>
-      {/* <div className = 'tamaWrapper'>
-        <Tamagotchi
-          title = 'Tama'>
-        </Tamagotchi>
-      </div> */}
+    <div className="mainWrapper">
+      <div className="background"></div>
+      <div className="container">
+        <div className="container--logo">
+          <img className="invert" src={marketLogo} />
+        </div>
+        <NavBar 
+        marketFields={marketFields}
+        setSearchFilter={setSearchFilter}
+        ></NavBar>
+        <ResultsBox
+        resultList={searchResults}></ResultsBox>
+      </div>
     </div>
   );
 };

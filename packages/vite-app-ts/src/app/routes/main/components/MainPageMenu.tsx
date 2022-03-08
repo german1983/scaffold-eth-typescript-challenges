@@ -68,6 +68,15 @@ export const MainPageMenu: FC<IMainPageMenuProps> = (props) => (
         Tama Market
       </Link>
     </Menu.Item>
+    <Menu.Item key="/tamaplayground">
+      <Link
+        onClick={() => {
+          props.setRoute('/tamaplayground');
+        }}
+        to="/tamaplayground">
+        Tama Playground
+      </Link>
+    </Menu.Item>
     <Menu.Item key="/mainnetdai">
       <Link
         onClick={() => {
