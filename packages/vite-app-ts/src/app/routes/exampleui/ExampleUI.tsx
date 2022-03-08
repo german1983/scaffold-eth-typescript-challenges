@@ -5,14 +5,14 @@ import { Signer, Contract } from 'ethers';
 import React, { useState, FC, useContext, useEffect, useRef, ReactElement } from 'react';
 import { Shape1 } from './components/Shape1';
 import { Shape2 } from './components/Shape2';
-import { GameMenu } from './components/GameMenu';
+import { GameMenu, IShapeObject, shapes } from './components/GameMenu';
 
 import { Address, Balance } from 'eth-components/ant';
 import { transactor, TTransactor } from 'eth-components/functions';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { useEthersContext } from 'eth-hooks/context';
 import { useContractLoader, useContractReader, useEventListener, useGasPrice } from 'eth-hooks';
-import { YourCollectible } from '~~/generated/contract-types';
+// import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { Tamagotchi } from './components/Tamagotchi';
@@ -21,7 +21,6 @@ import { storeExampleNFT } from './utils';
 import { TamaController } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
 import ReactDOMServer from 'react-dom/server';
-
 const basicColorSetup = {
   backColor: '3ca9de',
   middleColor: '90c6d6',
@@ -30,12 +29,7 @@ const basicColorSetup = {
   lineColor: '2273b5',
 };
 
-enum shapes {
-  SHAPE1,
-  SHAPE2,
-}
-
-var initialShapesArray: Array<Object> = [
+var initialShapesArray: Array<IShapeObject> = [
   {
     name: 'Oval',
     id: shapes.SHAPE1,
@@ -150,6 +144,14 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
           lineColor={lineColor}></Shape2>
       );
     }
+    return (
+      <Shape2
+        backColor={backColor}
+        middleColor={middleColor}
+        frontColor={frontColor}
+        buttonColor={buttonColor}
+        lineColor={lineColor}></Shape2>
+    );
   };
 
   return connected ? (
@@ -174,7 +176,7 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
           setCurrentShape={setCurrentShape}
           currentShape={currentShape}></GameMenu>
         <div className='mintButton'
-        onClick={async()=>{await mintConsole()}}>
+          onClick={async () => { await mintConsole() }}>
           MINT
         </div>
       </div>

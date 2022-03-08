@@ -1,6 +1,6 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { FC, useEffect, useState } from 'react';
-import { YourCollectible } from '~~/generated/contract-types';
+import { TamaController } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { useContractLoader, useContractReader } from 'eth-hooks';
@@ -39,11 +39,11 @@ export const YourCollectibles: FC<IYourCollectibleProps> = (props: IYourCollecti
   const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);
   const { mainnetProvider, blockExplorer, tx } = props;
 
-  const YourCollectibleRead = readContracts['YourCollectible'] as YourCollectible;
-  const YourCollectibleWrite = writeContracts['YourCollectible'] as YourCollectible;
+  const YourCollectibleRead = readContracts['TamaController'] as TamaController;
+  const YourCollectibleWrite = writeContracts['TamaController'] as TamaController;
 
   const balance = useContractReader<BigNumber[]>(YourCollectibleRead, {
-    contractName: 'YourCollectible',
+    contractName: 'TamaController',
     functionName: 'balanceOf',
     functionArgs: [ethersContext.account],
   });
@@ -97,7 +97,7 @@ export const YourCollectibles: FC<IYourCollectibleProps> = (props: IYourCollecti
     const uploaded = await ipfs.add(JSON.stringify(mintJson[mintCount]));
     setMintCount(mintCount + 1);
     console.log('Uploaded Hash: ', uploaded);
-    await tx(YourCollectibleWrite.mintItem(ethersContext.account, uploaded.path), (update) => {
+    await tx(YourCollectibleWrite.mintItem(uploaded.path), (update) => {
       console.log('📡 Transaction Update:', update);
       if (update && (update.status === 'confirmed' || update.status === 1)) {
         console.log(' 🍾 Transaction ' + update.hash + ' finished!');

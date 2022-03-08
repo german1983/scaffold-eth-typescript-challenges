@@ -60,8 +60,8 @@ export const MainPageContracts: FC<IMainPageContractsProps> = (props) => {
         />
 
         <GenericContract
-          contractName="TamaContainer"
-          contract={contractList?.['TamaContainer']}
+          contractName="TamaController"
+          contract={contractList?.['TamaController']}
           mainnetProvider={props.scaffoldAppProviders.mainnetProvider}
           blockExplorer={props.scaffoldAppProviders.targetNetwork.blockExplorer}
           contractConfig={props.appContractConfig}

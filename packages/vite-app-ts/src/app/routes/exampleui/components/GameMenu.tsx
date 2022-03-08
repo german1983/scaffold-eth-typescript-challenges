@@ -9,10 +9,19 @@ import { transactor, TTransactor } from 'eth-components/functions';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { useEthersContext } from 'eth-hooks/context';
 import { useContractLoader, useContractReader, useEventListener, useGasPrice } from 'eth-hooks';
-import { YourCollectible } from '~~/generated/contract-types';
+// import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import './GameMenu.less';
+
+export enum shapes {
+  SHAPE1,
+  SHAPE2,
+}
+export interface IShapeObject {
+  id: shapes;
+  name: string;
+}
 
 interface IMenu {
   backColor: any;
@@ -25,9 +34,9 @@ interface IMenu {
   setButtonColor: any;
   lineColor: any;
   setLineColor: any;
-  shapeList: Array<Object>;
-  setCurrentShape : any;
-  currentShape : any
+  shapeList: Array<IShapeObject>;
+  setCurrentShape: any;
+  currentShape: any
 }
 export const GameMenu: FC<IMenu> = (props) => {
   const [newPurpose, setNewPurpose] = useState('loading...');
@@ -110,13 +119,13 @@ export const GameMenu: FC<IMenu> = (props) => {
           <ul className="ul1">
             {shapeList.map((item) => {
               return (
-                  <div className="shapeSelector" onClick={()=>changeShape(item.id)}>{item.name}</div>
+                <div className="shapeSelector" onClick={() => changeShape(item.id)}>{item.name}</div>
               );
             })}
           </ul>
         </div>
       </div>
-      <div className= 'submenu'>Choose colors</div>
+      <div className='submenu'>Choose colors</div>
       <ul className="ul2">
         <li>
           <label>Back Shape</label>
