@@ -4,6 +4,7 @@ const https = require('https')
 var cors = require('cors')
 var bodyParser = require("body-parser");
 var app = express();
+const PORT = process.env.PORT || 5000
 
 let transactions = {}
 
@@ -40,12 +41,12 @@ if (fs.existsSync('server.key') && fs.existsSync('server.cert')) {
     https.createServer({
         key: fs.readFileSync('server.key'),
         cert: fs.readFileSync('server.cert')
-    }, app).listen(3000, 'localhost', () => {
-        console.log('HTTPS Listening: 3000')
+    }, app).listen(PORT, 'localhost', () => {
+        console.log('HTTPS Listening: ', PORT)
     })
 } else {
     console.log("Starting server without keys");
-    var server = app.listen(3000, function () {
+    var server = app.listen(PORT, function () {
         console.log("HTTP Listening on port:", server.address().address, server.address().port);
     });
 }
