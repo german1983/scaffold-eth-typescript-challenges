@@ -66,8 +66,9 @@ export const useScaffoldHooks = (
   // This hook will let you invoke a callback on every block or with a polling time!
   // 🙋🏽‍♂️ on block is preffered!
   useOnRepetition(
-    async (): Promise<void> =>
-      console.log(`⛓ A new mainnet block is here: ${await scaffoldAppProviders.mainnetProvider.getBlockNumber()}`),
+    async (): Promise<void> => {
+      console.log(`⛓ A new mainnet block is here: ${await scaffoldAppProviders.mainnetProvider.getBlockNumber()}`);
+    },
     {
       provider: scaffoldAppProviders.mainnetProvider,
     }
