@@ -32,7 +32,7 @@ export const ResultsBox: FC<IResultsBox> = (props) => {
         <div className="container--card-spot size-1">
           {resultList[beginIndex + 1] && (
             <div className="container--card border" onClick={async () => buyItem(beginIndex + 1)}>
-              <img className="item--card-image" src={sampleImage}></img>
+              <img className="item--card-image" src={resultList[beginIndex + 1].url}></img>
               <div className="container--card--text">
                 {/* <div className="item--notification">2</div> */}
                 <div className="item--icon">
@@ -47,7 +47,7 @@ export const ResultsBox: FC<IResultsBox> = (props) => {
         <div className="container--card-spot size-2">
           {resultList[beginIndex] && (
             <div className="container--card border" onClick={async () => buyItem(beginIndex)}>
-              <img className="item--card-image" src={sampleImage}></img>
+              <img className="item--card-image" src={resultList[beginIndex].url}></img>
               <div className="container--card--text dark">
                 <div className="item--icon">
                   <i className="fa fa-check-circle-o">{resultList[beginIndex].price}</i>
@@ -61,7 +61,7 @@ export const ResultsBox: FC<IResultsBox> = (props) => {
         <div className="container--card-spot size-1">
           {resultList[beginIndex + 2] && (
             <div className="container--card border" onClick={async () => buyItem(beginIndex + 2)}>
-              <img className="item--card-image" src={sampleImage}></img>
+              <img className="item--card-image" src={resultList[beginIndex + 2].url}></img>
               <div className="container--card--text">
                 <div className="item--icon">
                   <i className="fa fa-check-circle-o">{resultList[beginIndex + 2].price}</i>
@@ -77,7 +77,7 @@ export const ResultsBox: FC<IResultsBox> = (props) => {
         <div className="container--card-spot size-1">
           {resultList[beginIndex + 3] && (
             <div className="container--card" onClick={async () => buyItem(beginIndex + 3)}>
-              <img className="secondaryCard" src={sampleImage}></img>
+              <img className="secondaryCard" src={resultList[beginIndex + 3].url}></img>
               <div className="container--card--text">
                 <div className="item--icon">
                   <i className="fa fa-check-circle-o">{resultList[beginIndex + 3].price}</i>
@@ -91,7 +91,7 @@ export const ResultsBox: FC<IResultsBox> = (props) => {
         <div className="container--card-spot size-2">
           {resultList[beginIndex + 4] && (
             <div className="container--card border" onClick={async () => buyItem(beginIndex + 4)}>
-              <img className="secondaryCard" src={sampleImage}></img>
+              <img className="secondaryCard" src={resultList[beginIndex + 4].url}></img>
               <div className="container--card--text dark">
                 <div className="item--icon">
                   <i className="fa fa-check-circle-o">{resultList[beginIndex + 4].price}</i>
@@ -105,7 +105,7 @@ export const ResultsBox: FC<IResultsBox> = (props) => {
         <div className="container--card-spot size-1">
           {resultList[beginIndex + 5] && (
             <div className="container--card size-1" onClick={async () => buyItem(beginIndex + 5)}>
-              <img className="secondaryCard" src={sampleImage}></img>
+              <img className="secondaryCard" src={resultList[beginIndex + 5].url}></img>
               <div className="container--card--text">
                 <div className="item--icon">
                   <i className="fa fa-check-circle-o">{resultList[beginIndex + 5].price}</i>

@@ -13,11 +13,13 @@ import { useContractLoader, useContractReader, useEventListener, useGasPrice } f
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 // import { Tamagotchi } from './components/Tamagotchi';
-import { sampleMarketFields, sampleSearchResults,  sampleSearchResults2 } from './sampleData';
+import { sampleMarketFields, sampleSearchResults, sampleSearchResults2 } from './sampleData';
 import marketLogo from './tama-logo.png';
 import './styles.less';
 import { NavBar } from './components/navBar';
 import { ResultsBox } from './components/resultsBox';
+import { fetchFromNFTPort } from './utils';
+import { checkFormat } from './utils';
 
 export interface ITamaMarketProps {
   mainnetProvider: StaticJsonRpcProvider;
@@ -52,20 +54,42 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
   const [marketFields, setMarketFields] = useState(sampleMarketFields);
   const [searchResults, setSearchResults] = useState(sampleSearchResults);
   const [searchFilter, setSearchFilter] = useState(marketFields[0].name);
+  const [searchInput, setSearchInput] = useState('');
+  const [buttonSearch, setButtonSearch] = useState('Go!')
 
-  useEffect(()=>{
-    let newFields = marketFields.map((item)=>{
+  useEffect(() => {
+    let newFields = marketFields.map((item) => {
       return {
         ...item,
-        isActive : item.name != searchFilter ? false : true,
-    }});
+        isActive: item.name != searchFilter ? false : true,
+      };
+    });
     setMarketFields(newFields);
-  },[searchFilter]);
+  }, [searchFilter]);
 
-  useEffect(()=> {
-    if(marketFields[0].isActive) setSearchResults(sampleSearchResults)
-    else setSearchResults(sampleSearchResults2)
-  },[marketFields])
+  useEffect(() => {
+    if (marketFields[0].isActive) setSearchResults(sampleSearchResults);
+    else setSearchResults(sampleSearchResults2);
+  }, [marketFields]);
+
+  const onHandleSearch = async (input : String) =>{
+    setButtonSearch('Wait !')
+    let dataFromNFTPort = await fetchFromNFTPort(input);
+    dataFromNFTPort = dataFromNFTPort.filter(item=>checkFormat(item));
+    dataFromNFTPort = dataFromNFTPort.map((item) => {
+      return {
+        ...item,
+        url : item.cached_file_url,
+        title : item .name, 
+        description : '' 
+      }
+    })
+    setSearchResults(dataFromNFTPort);
+    setSearchInput('');
+    setButtonSearch('Go!');
+    console.log(dataFromNFTPort);
+  }
+
   return (
     <div className="mainWrapper">
       <div className="background"></div>
@@ -73,12 +97,14 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
         <div className="container--logo">
           <img className="invert" src={marketLogo} />
         </div>
-        <NavBar 
-        marketFields={marketFields}
-        setSearchFilter={setSearchFilter}
-        ></NavBar>
-        <ResultsBox
-        resultList={searchResults}></ResultsBox>
+        <div className="wrapper">
+          <label className='searchLabel'> Search Here :
+          <input className="search" type="text" value={searchInput} onChange={(event) => setSearchInput(event.target.value)}/>
+          <input className="submit" type="submit" value={buttonSearch} onClick={async () => {onHandleSearch(searchInput)}}/>
+          </label>
+        </div>
+        <NavBar marketFields={marketFields} setSearchFilter={setSearchFilter}></NavBar>
+        <ResultsBox resultList={searchResults}></ResultsBox>
       </div>
     </div>
   );
