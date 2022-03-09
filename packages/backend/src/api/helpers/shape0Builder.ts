@@ -23,7 +23,7 @@ export default function Build(props: IConsole): string {
           x2="109.18"
           y2="65.44"
           fill="#` + props.lineColor + `"
-          stroke="#"` + props.lineColor + `"
+          stroke="#` + props.lineColor + `"
           stroke-linecap="round"
           stroke-miterlimit="10"
           stroke-width="2"
