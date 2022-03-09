@@ -1,7 +1,13 @@
+export enum shapes {
+    SHAPE1,
+    SHAPE2,
+}
+
 export interface IConsole {
-    _id: string;
-    name: string;
-    email: string;
-    password: string;
-    salt: string;
+    shape: shapes;
+    backColor: string;
+    middleColor: string;
+    frontColor: string;
+    buttonColor: string;
+    lineColor: string;
 }

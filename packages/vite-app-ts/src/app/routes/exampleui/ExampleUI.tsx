@@ -1,26 +1,25 @@
-import { SyncOutlined } from '@ant-design/icons';
-import { formatEther, parseEther } from '@ethersproject/units';
-import { Button, Card, DatePicker, Divider, Input, List, Progress, Slider, Spin, Switch } from 'antd';
-import { Signer, Contract } from 'ethers';
-import React, { useState, FC, useContext, useEffect, useRef, ReactElement } from 'react';
+import './styles.less';
+import { useState, FC, useContext, useEffect, useRef } from 'react';
+
+import axios from 'axios';
+import { StaticJsonRpcProvider } from '@ethersproject/providers';
+
 import { Shape1 } from './components/Shape1';
 import { Shape2 } from './components/Shape2';
 import { GameMenu, IShapeObject, shapes } from './components/GameMenu';
 
-import { Address, Balance } from 'eth-components/ant';
-import { transactor, TTransactor } from 'eth-components/functions';
-import { StaticJsonRpcProvider } from '@ethersproject/providers';
+import { TamaController } from '~~/generated/contract-types';
+import { transactor } from 'eth-components/functions';
 import { useEthersContext } from 'eth-hooks/context';
-import { useContractLoader, useContractReader, useEventListener, useGasPrice } from 'eth-hooks';
-// import { YourCollectible } from '~~/generated/contract-types';
+import { useContractLoader, useGasPrice } from 'eth-hooks';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
-import { Tamagotchi } from './components/Tamagotchi';
-import './styles.less';
-import { storeExampleNFT } from './utils';
-import { TamaController } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
-import ReactDOMServer from 'react-dom/server';
+
+// We should move this into a Service but given this is the only place we are using it for now, I'm simplifying
+// const apiServerUrl = "https://tama-test-api.herokuapp.com/api/consoles";
+const apiServerUrl = "http://localhost:5000/api/consoles";
+
 const basicColorSetup = {
   backColor: '3ca9de',
   middleColor: '90c6d6',
@@ -47,23 +46,14 @@ export interface IExampleUIProps {
   price: number;
 }
 
+interface CreateConsoleResponse {
+  ipfsCid: string;
+}
+
 export const ExampleUI: FC<IExampleUIProps> = (props) => {
-  const [newPurpose, setNewPurpose] = useState('loading...');
   const ethersContext = useEthersContext();
   const appContractConfig = useAppContracts();
-  const readContracts = useContractLoader(appContractConfig);
   const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);
-
-  const yourContractRead = readContracts['YourContract'] as any;
-  const yourContractWrite = writeContracts['YourContract'] as any;
-  const purpose = useContractReader<string>(yourContractRead, {
-    contractName: 'YourContract',
-    functionName: 'purpose',
-  });
-  const setPurposeEvents = useEventListener(yourContractRead, 'SetPurpose', 1);
-
-  const signer = ethersContext.signer;
-  const address = ethersContext.account ?? '';
 
   const [backColor, setBackColor] = useState(basicColorSetup.backColor);
   const [middleColor, setMiddleColor] = useState(basicColorSetup.middleColor);
@@ -93,7 +83,6 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
   const ethComponentsSettings = useContext(EthComponentsSettingsContext);
   const gasPrice = useGasPrice(ethersContext.chainId, 'fast');
   const tx = transactor(ethComponentsSettings, ethersContext?.signer, gasPrice);
-  // const ScaffoldListener = useScaffoldHooks(scaffoldAppProviders, readContracts, writeContracts, mainnetContracts)
 
   const [connected, connect] = useState(false);
 
@@ -105,11 +94,20 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
   const mintConsole = async () => {
     if (!tx || !ethersContext.account) return;
 
+    const res = await axios.post(apiServerUrl, {
+      shape: toMint.current,
+      backColor: backColor,
+      middleColor: middleColor,
+      frontColor: frontColor,
+      buttonColor: buttonColor,
+      lineColor: lineColor,
+    });
+    console.log("RESULT", res.data);
+    const ipfsCid = (res.data as CreateConsoleResponse).ipfsCid;
+
     // upload to ipfs
-    var myComponent = ReactDOMServer.renderToString(renderShape(toMint.current))
-    const uploaded = await storeExampleNFT(myComponent); // TODO replace with real options selected by the user
-    console.log('Uploaded Hash: ', uploaded);
-    await tx(TamaControllerWrite.mintItem(uploaded), (update) => {
+    console.log('Uploaded Hash: ', ipfsCid);
+    await tx(TamaControllerWrite.mintItem(ipfsCid), (update) => {
       console.log('📡 Transaction Update:', update);
       if (update && (update.status === 'confirmed' || update.status === 1)) {
         console.log(' 🍾 Transaction ' + update.hash + ' finished!');
