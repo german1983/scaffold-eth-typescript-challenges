@@ -63,10 +63,10 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
   const TamaControllerRead = readContracts['TamaController'] as TamaController;
   const TamaControllerWrite = writeContracts['TamaController'] as TamaController;
 
-  const [currentShape, setCurrentShape] = useState(shapes.SHAPE2);
+  const [currentConsole, setCurrentConsole] = useState(shapes.SHAPE2);
 
   const toMint = useRef<any>();
-  toMint.current = currentShape;
+  toMint.current = currentConsole;
 
   const ethComponentsSettings = useContext(EthComponentsSettingsContext);
   const gasPrice = useGasPrice(ethersContext.chainId, 'fast');
@@ -157,39 +157,14 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
     });
   };
   const renderShape = (value: any) => {
-    if (value == shapes.SHAPE1) {
-      return (
-        <Shape1
-          backColor={backColor}
-          middleColor={middleColor}
-          frontColor={frontColor}
-          buttonColor={buttonColor}
-          lineColor={lineColor}></Shape1>
-      );
-    }
-    if (value == shapes.SHAPE2) {
-      return (
-        <Shape2
-          backColor={backColor}
-          middleColor={middleColor}
-          frontColor={frontColor}
-          buttonColor={buttonColor}
-          lineColor={lineColor}></Shape2>
-      );
-    }
-    return (
-      <Shape2
-        backColor={backColor}
-        middleColor={middleColor}
-        frontColor={frontColor}
-        buttonColor={buttonColor}
-        lineColor={lineColor}></Shape2>
-    );
+    return <img>{currentConsole}</img>
   };
 
   return connected ? (
     <div className="mainWrapper">
-      <div className="tamaWrapper">{renderShape(currentShape)}</div>
+      <div className="tamaWrapper">
+        {consoleList[currentConsole] && <img className="console--img" src={consoleList[currentConsole].image}></img>}
+      </div>
       <div className="menuWrapper">
         <div className="menuTitle">PLAYGROUND</div>
         <GameMenu
@@ -204,8 +179,8 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
           lineColor={lineColor}
           setLineColor={setLineColor}
           shapeList={consoleList}
-          setCurrentShape={setCurrentShape}
-          currentShape={currentShape}></GameMenu>
+          setCurrentConsole={setCurrentConsole}
+          currentConsole={currentConsole}></GameMenu>
         <div
           className="mintButton"
           onClick={async () => {

@@ -15,6 +15,7 @@ import { useContractLoader, useGasPrice } from 'eth-hooks';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { targetNetworkInfo } from '~~/config/providersConfig';
+import ReactDOMServer from 'react-dom/server';
 
 // We should move this into a Service but given this is the only place we are using it for now, I'm simplifying
 // const apiServerUrl = "https://tama-test-api.herokuapp.com/api/consoles";
@@ -61,6 +62,7 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
   const [buttonColor, setButtonColor] = useState(basicColorSetup.buttonColor);
   const [lineColor, setLineColor] = useState(basicColorSetup.lineColor);
   const [shapeList, setShapeList] = useState(initialShapesArray);
+  const [buttonText, setButtonText] = useState('MINT');
   const TamaControllerWrite = writeContracts['TamaController'] as TamaController;
 
   /*
@@ -94,6 +96,8 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
   const mintConsole = async () => {
     if (!tx || !ethersContext.account) return;
 
+    // var myComponent = ReactDOMServer.renderToString(renderShape(toMint.current))
+    setButtonText('minting...')
     const res = await axios.post(apiServerUrl, {
       shape: toMint.current,
       backColor: backColor,
@@ -122,6 +126,7 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
         );
       }
     });
+    setButtonText('MINT')
   };
   const renderShape = (value: any) => {
     if (value == shapes.SHAPE1) {
@@ -177,7 +182,7 @@ export const ExampleUI: FC<IExampleUIProps> = (props) => {
           currentShape={currentShape}></GameMenu>
         <div className='mintButton'
           onClick={async () => { await mintConsole() }}>
-          MINT
+          {buttonText}
         </div>
       </div>
     </div>
