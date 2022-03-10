@@ -3,8 +3,6 @@ import { formatEther, parseEther } from '@ethersproject/units';
 import { Button, Card, DatePicker, Divider, Input, List, Progress, Slider, Spin, Switch } from 'antd';
 import { Signer, Contract } from 'ethers';
 import React, { useState, FC, useContext, useEffect, useRef, ReactElement } from 'react';
-import { Shape1 } from './components/Shape1';
-import { Shape2 } from './components/Shape2';
 
 import { BigNumber, ethers } from 'ethers';
 import { GameMenu, IShapeObject, shapes } from './components/Menu';
@@ -19,10 +17,11 @@ import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
 import { Tamagotchi } from './components/Tamagotchi';
 import './styles.less';
-import { storeExampleNFT } from './utils';
 import { TamaController } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
 import ReactDOMServer from 'react-dom/server';
+import { TamaConsole } from './components/TamaConsole';
+import { consoleConfigs } from './utils';
 const basicColorSetup = {
   backColor: '3ca9de',
   middleColor: '90c6d6',
@@ -41,6 +40,7 @@ var initialShapesArray: Array<IShapeObject> = [
     id: shapes.SHAPE2,
   },
 ];
+
 export interface ITamaPlaygroundProps {
   mainnetProvider: StaticJsonRpcProvider;
   yourCurrentBalance: any;
@@ -63,7 +63,7 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
   const TamaControllerRead = readContracts['TamaController'] as TamaController;
   const TamaControllerWrite = writeContracts['TamaController'] as TamaController;
 
-  const [currentConsole, setCurrentConsole] = useState(shapes.SHAPE2);
+  const [currentConsole, setCurrentConsole] = useState(undefined);
 
   const toMint = useRef<any>();
   toMint.current = currentConsole;
@@ -128,43 +128,31 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
           console.log(e);
         }
       }
-      setConsoleList(collectibleUpdate);
+      //temporary map
+      let temp = collectibleUpdate.map((item) => {
+          let attributes = item.attributes;   
+          return {
+              ...item,
+              attributes : consoleConfigs[item.id.toNumber()]
+          }
+      })
+    //   console.log("UPDATING CONSOLE LIST",temp);
+      setConsoleList(temp);
     };
     updateTamaControllers();
   }, [ethersContext.account, balance]);
-
-  const saveState = async () => {
-    if (!tx || !ethersContext.account) return;
-
-    // upload to ipfs
-    var myComponent = ReactDOMServer.renderToString(renderShape(toMint.current));
-    const uploaded = await storeExampleNFT(myComponent); // TODO replace with real options selected by the user
-    console.log('Uploaded Hash: ', uploaded);
-    await tx(TamaControllerWrite.mintItem(uploaded), (update) => {
-      console.log('📡 Transaction Update:', update);
-      if (update && (update.status === 'confirmed' || update.status === 1)) {
-        console.log(' 🍾 Transaction ' + update.hash + ' finished!');
-        console.log(
-          ' ⛽️ ' +
-            update.gasUsed +
-            '/' +
-            (update.gasLimit || update.gas) +
-            ' @ ' +
-            parseFloat(update.gasPrice) / 1000000000 +
-            ' gwei'
-        );
-      }
-    });
-  };
   const renderShape = (value: any) => {
     return <img>{currentConsole}</img>
   };
 
   return connected ? (
     <div className="mainWrapper">
-      <div className="tamaWrapper">
-        {consoleList[currentConsole] && <img className="console--img" src={consoleList[currentConsole].image}></img>}
-      </div>
+      {consoleList[currentConsole] &&<div className="tamaWrapper"> 
+         <img className="console--img" src={consoleList[currentConsole].image}></img>
+        <TamaConsole
+        consoleConfig={consoleList[currentConsole].attributes}
+        ></TamaConsole></div>}
+      
       <div className="menuWrapper">
         <div className="menuTitle">PLAYGROUND</div>
         <GameMenu
@@ -184,7 +172,7 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
         <div
           className="mintButton"
           onClick={async () => {
-            await saveState();
+            // await saveState();
           }}>
           SAVE
         </div>

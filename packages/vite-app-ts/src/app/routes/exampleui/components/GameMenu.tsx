@@ -176,7 +176,7 @@ export const GameMenu: FC<IMenu> = (props) => {
             }}></input>
         </li>
       </ul>
-      <div className='submenu'>Learn how to play</div>
+      <div className='submenu'>Learn more about Tama</div>
     </div>
   );
 };

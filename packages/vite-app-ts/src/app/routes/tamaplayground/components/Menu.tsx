@@ -108,8 +108,8 @@ export const GameMenu: FC<IMenu> = (props) => {
     setLineColor(e.target.value.substring(1));
   };
 
-  const changeConsole = (id: any) => {
-    setCurrentConsole(id);
+  const changeConsole = (index: any) => {
+    setCurrentConsole(index);
   };
 
   return (
@@ -118,13 +118,13 @@ export const GameMenu: FC<IMenu> = (props) => {
       <div>
         <div>
           <ul className="ul1">
-            {shapeList.map((item) => {
-              return <img className="container-console" src={item.image} onClick={() => changeConsole(item.id)} />;
+            {shapeList.map((item, index) => {
+              return <img className="container-console" src={item.image} onClick={() => changeConsole(index)} />;
             })}
           </ul>
         </div>
       </div>
-      <div className="submenu">Choose colors</div>
+      <div className="submenu">Wallet</div>
       <ul className="ul2">
         <li>
           <label>Back Shape</label>
@@ -174,7 +174,7 @@ export const GameMenu: FC<IMenu> = (props) => {
             }}></input>
         </li>
       </ul>
-      <div className="submenu">Learn how to play</div>
+      <div className="submenu" style={{'padding-top':'1rem','font-size':'15px'}}>Learn more about Tama</div>
     </div>
   );
 };

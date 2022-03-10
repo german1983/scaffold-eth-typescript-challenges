@@ -1,67 +1,72 @@
-import { NFTStorage, Blob } from 'nft.storage';
+export const consoleConfigs = {
+  1: {
+    consolex: 112.19,
+    consoley: 136.48,
+    screenx: 18,
+    screeny: 29,
+    screenw: 68,
+    screenh: 69,
+    button1x: 27.93,
+    button1y: 102.07,
+    button1w: 14,
+    button2x: 48.08,
+    button2y: 104.38,
+    button2w: 14,
+    button3x: 69.32,
+    button3y: 102.62,
+    button3w: 14,
+  },
+  2: {
+    consolex: 112.19,
+    consoley: 136.48,
+    screenx: 18,
+    screeny: 22,
+    screenw: 75,
+    screenh: 69,
+    button1x: 21.43,
+    button1y: 100.57,
+    button1w: 17,
+    button2x: 46.58,
+    button2y: 92.88,
+    button2w: 17,
+    button3x: 72.82,
+    button3y: 101.12,
+    button3w: 17,
+  },
+};
 
-const NFT_STORAGE_TOKEN =
-  process.env.NFT_STORAGE_API_KEY ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDM4MjYwYTczQzI1ODZEODMxODlmMEQ2M0Q5NUZlYUVDNWY1NDU0ZmQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0NjU5ODE3OTUwMywibmFtZSI6IlRhbWF2ZXJzZSJ9.na-vsUo7qamdGSrvOCqGbKSE0m4h2MdT-n6_BSQx15I';
-const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
+export function calcLoc(config: Object) {
+  let mult = 520 / config.consolex;
+  let new_screenw = config.screenw * mult;
+  let new_screenh = config.screenh * mult;
+  let new_screeny = mult * config.screeny - config.consoley * mult;
+  let new_screenx = mult * config.screenx;
+  // let new_screenh = config.screenh * mult;
+  let new_button1y = mult * config.button1y - config.consoley * mult;
+  let new_button1x = mult * config.button1x;
+  let new_button1w = config.button1w * mult;
 
-export function brigthenColor(color: string, brigtness: any) {
-  var result: any = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+  let new_button2y = mult * config.button2y - config.consoley * mult;
+  let new_button2x = mult * config.button2x;
+  let new_button2w = config.button2w * mult;
 
-  var r = parseInt(result[1], 16);
-  var g = parseInt(result[2], 16);
-  var b = parseInt(result[3], 16);
+  let new_button3y = mult * config.button3y - config.consoley * mult;
+  let new_button3x = mult * config.button3x;
+  let new_button3w = config.button3w * mult;
 
-  var r_delta = Math.floor(r * brigtness);
-  var g_delta = Math.floor(g * brigtness);
-  var b_delta = Math.floor(b * brigtness);
-
-  if (r + r_delta > 255) r_delta = 255 - r;
-  if (g + g_delta > 255) g_delta = 255 - g;
-  if (b + b_delta > 255) b_delta = 255 - b;
-
-  r = r + r_delta;
-  g = g + g_delta;
-  b = b + b_delta;
-
-  console.log(r, g, b);
-
-  console.log('' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1));
-
-  return '' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-}
-
-export async function storeExampleNFT(options: any | undefined) {
-  const toMint = mintTemplate(options);
-  const image = toMint.image;
-  console.log('Image being minted (base64): ', image);
-  const myNFT = JSON.stringify(toMint);
-  const someData = new Blob([myNFT]);
-  const cid = await client.storeBlob(someData);
-  return cid;
-}
-export function mintTemplate(options: any) {
-  console.log('PERFORMING TRANSACTION WITH CUSTOMIZABLE');
-  console.log(options);
-  var decoded = unescape(encodeURIComponent(options));
-  return {
-    description: 'This is a great Tama Container __TEMPLATE__',
-    image: 'data:image/svg+xml;base64,' + btoa(decoded), // Buffer.from(decoded, 'base64'),
-    name: 'Tama Container __TEMPLATE__',
-    // TODO: The attributes should have a 1:1 with the Template Properties... I'm not updating them because I'm not sure how far we'll go in terms of customization, but we should make sure each attribute is reflected
-    attributes: [
-      {
-        trait_type: 'guscioFill',
-        value: 1,
-      },
-      {
-        trait_type: 'Eyes',
-        value: 'googly',
-      },
-      {
-        trait_type: 'Stamina',
-        value: 42,
-      },
-    ],
-  };
+  return [
+    new_screenx,
+    new_screeny,
+    new_screenw,
+    new_screenh,
+    new_button1x,
+    new_button1y,
+    new_button1w,
+    new_button2x,
+    new_button2y,
+    new_button2w,
+    new_button3x,
+    new_button3y,
+    new_button3w,
+  ];
 }
