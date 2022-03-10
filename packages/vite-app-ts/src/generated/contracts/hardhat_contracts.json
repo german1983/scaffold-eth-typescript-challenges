@@ -971,6 +971,45 @@
             {
               "inputs": [
                 {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "name": "TamacharacterId",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "blockadded",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "contractAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "scale",
+                  "type": "uint8"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
                   "internalType": "address",
                   "name": "to",
                   "type": "address"
@@ -1392,6 +1431,34 @@
                 }
               ],
               "name": "transferFrom",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "contractAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "tankId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "uint8",
+                  "name": "scale",
+                  "type": "uint8"
+                }
+              ],
+              "name": "transferNFT",
               "outputs": [],
               "stateMutability": "nonpayable",
               "type": "function"
@@ -2041,13 +2108,8 @@
             {
               "inputs": [
                 {
-                  "internalType": "address",
-                  "name": "to",
-                  "type": "address"
-                },
-                {
                   "internalType": "string",
-                  "name": "tokenURIInput",
+                  "name": "tokenURIAssigned",
                   "type": "string"
                 }
               ],

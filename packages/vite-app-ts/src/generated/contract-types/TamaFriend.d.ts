@@ -25,7 +25,7 @@ interface TamaFriendInterface extends ethers.utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintItem(address,string)": FunctionFragment;
+    "mintItem(string)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -55,10 +55,7 @@ interface TamaFriendInterface extends ethers.utils.Interface {
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
-  encodeFunctionData(
-    functionFragment: "mintItem",
-    values: [string, string]
-  ): string;
+  encodeFunctionData(functionFragment: "mintItem", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -261,8 +258,7 @@ export class TamaFriend extends BaseContract {
     ): Promise<[boolean]>;
 
     mintItem(
-      to: string,
-      tokenURIInput: string,
+      tokenURIAssigned: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -358,8 +354,7 @@ export class TamaFriend extends BaseContract {
   ): Promise<boolean>;
 
   mintItem(
-    to: string,
-    tokenURIInput: string,
+    tokenURIAssigned: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -449,8 +444,7 @@ export class TamaFriend extends BaseContract {
     ): Promise<boolean>;
 
     mintItem(
-      to: string,
-      tokenURIInput: string,
+      tokenURIAssigned: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -611,8 +605,7 @@ export class TamaFriend extends BaseContract {
     ): Promise<BigNumber>;
 
     mintItem(
-      to: string,
-      tokenURIInput: string,
+      tokenURIAssigned: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -712,8 +705,7 @@ export class TamaFriend extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mintItem(
-      to: string,
-      tokenURIInput: string,
+      tokenURIAssigned: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
