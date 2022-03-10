@@ -24,7 +24,7 @@ import { mainnetProvider } from '~~/config/providersConfig';
 // import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
-import { TamaControllers } from '../my-mint/TamaController';
+import { TamaDex } from '../tama-dex/TamaDex';
 
 export const DEBUG = false;
 
@@ -108,11 +108,15 @@ export const Main: FC = () => {
               tx={tx}
             />
           </Route>
-          <Route exact path="/tamacontroller">
-            <TamaControllers
+          <Route path="/tamadex">
+            <TamaDex
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
-              blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
+              address={ethersContext.account}
+              yourCurrentBalance={yourCurrentBalance}
+              price={ethPrice}
               tx={tx}
+              readContracts={readContracts}
+              writeContracts={writeContracts}
             />
           </Route>
           <Route exact path="/debugcontract">
