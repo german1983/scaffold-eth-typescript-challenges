@@ -8,34 +8,34 @@ export default function Build(props: IConsole): string {
       <g id="guscio">
         <path
           d="M 3.088898780806879 3.740731632431674 L 52.77777777777777 13.703703703703702 L 108.33333333333333 2.7777777777777777 L 103.88888888888889 64.81481481481481 L 109.62962962962962 131.29629629629628 L 57.59259259259259 122.59259259259258 L 2.222222222222222 133.88888888888889 L 7.777777777777778 65.55555555555556 L 3.088898780806879 3.740731632431674 z"
-          fill="` + props.backColor + `
-          stroke="` + props.lineColor + `
+          fill="#` + props.backColor + `"
+          stroke="#` + props.lineColor + `"
           stroke-miterlimit="10"
           stroke-width="2"
         />
         <path
           d="M 10.496306057394762 64.85184166428175 L 52.59259259259259 17.962962962962962 L 100.55555555555554 63.51851851851851 L 56.666666666666664 119.07407407407406 L 10.496306057394762 64.85184166428175 z"
-          fill="` + props.middleColor + `
+          fill="#` + props.middleColor + `"
         />
         <line
           x1="8.46"
           y1="65.44"
           x2="103.18"
           y2="65.44"
-          fill="` + props.lineColor + `
-          stroke="` + props.lineColor + `
+          fill="#` + props.lineColor + `"
+          stroke="#` + props.lineColor + `"
           stroke-linecap="round"
           stroke-miterlimit="10"
           stroke-width="2"
         />
       </g>
       <g id="bottoni">
-        <circle cx="30.91" cy="109.69" r="8.5" fill="` + brigthenColor(props.buttonColor, 0.4) + ` />
-        <circle cx="55.99" cy="101.89" r="8.5" fill="` + brigthenColor(props.buttonColor, 0.4) + ` />
-        <circle cx="82.31" cy="110.29" r="8.5" fill="` + brigthenColor(props.buttonColor, 0.4) + ` />
-        <circle cx="29.93" cy="109.07" r="8.5" fill="` + props.buttonColor + ` />
-        <circle cx="55.08" cy="101.38" r="8.5" fill="` + props.buttonColor + ` />
-        <circle cx="81.32" cy="109.62" r="8.5" fill="` + props.buttonColor + ` />
+        <circle cx="30.91" cy="109.69" r="8.5" fill="#` + brigthenColor(props.buttonColor, 0.4) + `" />
+        <circle cx="55.99" cy="101.89" r="8.5" fill="#` + brigthenColor(props.buttonColor, 0.4) + `" />
+        <circle cx="82.31" cy="110.29" r="8.5" fill="#` + brigthenColor(props.buttonColor, 0.4) + `" />
+        <circle cx="29.93" cy="109.07" r="8.5" fill="#` + props.buttonColor + `" />
+        <circle cx="55.08" cy="101.38" r="8.5" fill="#` + props.buttonColor + `" />
+        <circle cx="81.32" cy="109.62" r="8.5" fill="#` + props.buttonColor + `" />
       </g>
       <g id="lucine">
         <path
@@ -59,8 +59,8 @@ export default function Build(props: IConsole): string {
       width="75"
       height="69"
       rx="6.41"
-      fill="` + props.frontColor + `
-      stroke="` + props.lineColor + `
+      fill="#` + props.frontColor + `"
+      stroke="#` + props.lineColor + `"
       stroke-linecap="round"
       stroke-miterlimit="10"
       stroke-width="2"

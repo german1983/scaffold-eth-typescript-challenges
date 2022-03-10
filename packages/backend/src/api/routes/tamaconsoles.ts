@@ -22,8 +22,9 @@ export default (app: Router) => {
 
     function buildMetadata(shapeSVG: string, options: IConsole) {
         console.log('PERFORMING TRANSACTION WITH CUSTOMIZABLE');
-        console.log(shapeSVG);
-        var decoded = unescape(encodeURIComponent(shapeSVG));
+        const cleanSVG = shapeSVG.replace(/[\r\n]+/gm, '')
+        console.log(cleanSVG);
+        var decoded = unescape(encodeURIComponent(cleanSVG));
         const shapeType = GetShapeTitle(options.shape);
         return {
             description: "Customized " + shapeType + " Console",
