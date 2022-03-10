@@ -51,7 +51,7 @@ interface CreateConsoleResponse {
   ipfsCid: string;
 }
 
-export const TamaGame: FC<IExampleUIProps> = (props) => {
+export const TamaConsole: FC<IExampleUIProps> = (props) => {
   const ethersContext = useEthersContext();
   const appContractConfig = useAppContracts();
   const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);

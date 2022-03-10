@@ -23,13 +23,13 @@ export const MainPageMenu: FC<IMainPageMenuProps> = (props) => (
         Tama Friend
       </Link>
     </Menu.Item>
-    <Menu.Item key="/tamagame">
+    <Menu.Item key="/tamaconsole">
       <Link
         onClick={() => {
-          props.setRoute('/tamagame');
+          props.setRoute('/tamaconsole');
         }}
-        to="/tamagame">
-        Tama Game
+        to="/tamaconsole">
+        Tama Console
       </Link>
     </Menu.Item>
     <Menu.Item key="/tamadex">

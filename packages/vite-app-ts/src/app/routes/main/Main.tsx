@@ -6,7 +6,7 @@ import { useGasPrice, useContractLoader, useContractReader, useBalance } from 'e
 import { useDexEthPrice } from 'eth-hooks/dapps';
 
 import { GenericContract } from 'eth-components/ant/generic-contract';
-import { TamaGame, YourCollectibles, TamaMarket, TamaPlayground, TamaDEX } from '~~/app/routes';
+import { TamaConsole, YourCollectibles, TamaMarket, TamaPlayground, TamaDEX } from '~~/app/routes';
 import { transactor } from 'eth-components/functions';
 
 import { ethers } from 'ethers';
@@ -128,8 +128,8 @@ export const Main: FC = () => {
             />
           </Route>
           {/* you can add routes here like the below examlples */}
-          <Route path="/tamagame">
-            <TamaGame
+          <Route path="/tamaconsole">
+            <TamaConsole
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               yourCurrentBalance={yourCurrentBalance}
               price={ethPrice}
