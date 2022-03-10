@@ -36,8 +36,8 @@ interface IMenu {
   lineColor: any;
   setLineColor: any;
   shapeList: Array<IShapeObject>;
-  setCurrentShape: any;
-  currentShape: any;
+  setCurrentConsole: any;
+  currentConsole: any;
 }
 export const GameMenu: FC<IMenu> = (props) => {
   const [newPurpose, setNewPurpose] = useState('loading...');
@@ -78,8 +78,8 @@ export const GameMenu: FC<IMenu> = (props) => {
     lineColor,
     setLineColor,
     shapeList,
-    setCurrentShape,
-    currentShape,
+    setCurrentConsole,
+    currentConsole,
   } = props;
 
   useEffect(() => {
@@ -108,8 +108,8 @@ export const GameMenu: FC<IMenu> = (props) => {
     setLineColor(e.target.value.substring(1));
   };
 
-  const changeShape = (id: any) => {
-    setCurrentShape(id);
+  const changeConsole = (id: any) => {
+    setCurrentConsole(id);
   };
 
   return (
@@ -119,7 +119,7 @@ export const GameMenu: FC<IMenu> = (props) => {
         <div>
           <ul className="ul1">
             {shapeList.map((item) => {
-              return <img className="container-console" src={item.image} onClick={() => changeShape(item.id)} />;
+              return <img className="container-console" src={item.image} onClick={() => changeConsole(item.id)} />;
             })}
           </ul>
         </div>

@@ -3,7 +3,7 @@ import { formatEther, parseEther } from '@ethersproject/units';
 import { Button, Card, DatePicker, Divider, Input, List, Progress, Slider, Spin, Switch } from 'antd';
 import { Signer, Contract } from 'ethers';
 import React, { useState, FC, useContext, useEffect } from 'react';
-
+import TextArea from 'antd/lib/input/TextArea';
 import { Address, Balance } from 'eth-components/ant';
 import { transactor, TTransactor } from 'eth-components/functions';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
@@ -15,7 +15,7 @@ import { EthComponentsSettingsContext } from 'eth-components/models';
 // import { Tamagotchi } from './components/Tamagotchi';
 import { sampleMarketFields, sampleSearchResults, sampleSearchResults2 } from './sampleData';
 import marketLogo from './tama-logo.png';
-import './styles.less';
+import './TamaMarket.less';
 import { NavBar } from './components/navBar';
 import { ResultsBox } from './components/resultsBox';
 import { fetchFromNFTPort } from './utils';
@@ -56,6 +56,7 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
   const [searchFilter, setSearchFilter] = useState(marketFields[0].name);
   const [searchInput, setSearchInput] = useState('');
   const [buttonSearch, setButtonSearch] = useState('Go!')
+  const [reloadSearchBar, setReloadSearchBar] = useState(false);
 
   useEffect(() => {
     let newFields = marketFields.map((item) => {
@@ -73,7 +74,9 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
   }, [marketFields]);
 
   const onHandleSearch = async (input: String) => {
-    setButtonSearch('Wait !')
+    setButtonSearch('Wait');
+    setSearchInput('');
+    setReloadSearchBar(true);
     let dataFromNFTPort = await fetchFromNFTPort(input);
     dataFromNFTPort = dataFromNFTPort.filter((item: any) => checkFormat(item));
     dataFromNFTPort = dataFromNFTPort.map((item: any) => {
@@ -85,23 +88,35 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
       }
     })
     setSearchResults(dataFromNFTPort);
-    setSearchInput('');
     setButtonSearch('Go!');
+    setReloadSearchBar(false);
     console.log('fetched data', dataFromNFTPort);
   }
 
-  return (
-    <div className="mainWrapper">
-      <div className="background"></div>
-      <div className="container">
+  const Input = () => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        onHandleSearch(searchInput)
+        // console.log('searching for this value',searchInput)
+      }
+    }
+  
+    // return <div className="marketInput">
+      return <textarea className="marketInput searchBar" key={reloadSearchBar} onKeyDown={handleKeyDown} placeholder='SEARCH IN NFT PORT' value={searchInput} onChange={(event) => setSearchInput(event.target.value)} />
+      // </div>
+  }
+
+  return ( <div className="marketMainWrapper">
+      <div className="marketBackground"></div>
+      <div className="marketContainer">
         <div className="container--logo">
           <img className="invert" src={marketLogo} />
         </div>
-        <div className="wrapper">
-          <div className='searchLabel'>
-            <input className="search" placeholder='SEARCH IN NFT PORT' type="text" value={searchInput} onChange={(event) => setSearchInput(event.target.value)} />
-            <input className="submit" type="submit" value={buttonSearch} onClick={async () => { onHandleSearch(searchInput) }} />
-          </div>
+        <div className="searchLabel market-wrapper">
+          {/* <div className='searchLabel'> */}
+            {Input()}
+            <label className="marketInput submit" onClick={async () => { onHandleSearch(searchInput) }}>{buttonSearch}</label>
+          {/* </div */}
         </div>
         <NavBar marketFields={marketFields} setSearchFilter={setSearchFilter}></NavBar>
         <ResultsBox resultList={searchResults}></ResultsBox>
