@@ -6,7 +6,7 @@ import { useGasPrice, useContractLoader, useContractReader, useBalance } from 'e
 import { useDexEthPrice } from 'eth-hooks/dapps';
 
 import { GenericContract } from 'eth-components/ant/generic-contract';
-import { Hints, Subgraph, ExampleUI, YourCollectibles, TamaMarket, TamaPlayground } from '~~/app/routes';
+import { TamaGame, YourCollectibles, TamaMarket, TamaPlayground, TamaDEX } from '~~/app/routes';
 import { transactor } from 'eth-components/functions';
 
 import { ethers } from 'ethers';
@@ -109,7 +109,7 @@ export const Main: FC = () => {
             />
           </Route>
           <Route path="/tamadex">
-            <TamaDex
+            <TamaDEX
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               address={ethersContext.account}
               yourCurrentBalance={yourCurrentBalance}
@@ -117,6 +117,7 @@ export const Main: FC = () => {
               tx={tx}
               readContracts={readContracts}
               writeContracts={writeContracts}
+            // example how to directly load the contracts from here: contract={mainnetContracts?.['DAI']}
             />
           </Route>
           <Route exact path="/debugcontract">
@@ -127,16 +128,8 @@ export const Main: FC = () => {
             />
           </Route>
           {/* you can add routes here like the below examlples */}
-          <Route path="/hints">
-            <Hints
-              address={ethersContext?.account ?? ''}
-              yourCurrentBalance={yourCurrentBalance}
-              mainnetProvider={scaffoldAppProviders.mainnetProvider}
-              price={ethPrice}
-            />
-          </Route>
-          <Route path="/exampleui">
-            <ExampleUI
+          <Route path="/tamagame">
+            <TamaGame
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               yourCurrentBalance={yourCurrentBalance}
               price={ethPrice}
@@ -154,24 +147,6 @@ export const Main: FC = () => {
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               yourCurrentBalance={yourCurrentBalance}
               price={ethPrice}
-            />
-          </Route>
-          <Route path="/mainnetdai">
-            {mainnetProvider != null && (
-              <GenericContract
-                contractName="DAI"
-                contract={mainnetContracts?.['DAI']}
-                mainnetProvider={scaffoldAppProviders.mainnetProvider}
-                blockExplorer={NETWORKS['mainnet'].blockExplorer}
-                contractConfig={appContractConfig}
-              />
-            )}
-          </Route>
-          <Route path="/subgraph">
-            <Subgraph
-              subgraphUri={subgraphUri}
-              writeContracts={writeContracts}
-              mainnetProvider={scaffoldAppProviders.mainnetProvider}
             />
           </Route>
         </Switch>

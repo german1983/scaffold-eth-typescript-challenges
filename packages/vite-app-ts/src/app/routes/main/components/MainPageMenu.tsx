@@ -20,43 +20,25 @@ export const MainPageMenu: FC<IMainPageMenuProps> = (props) => (
           props.setRoute('/');
         }}
         to="/">
-        YourCollectible
+        Tama Friend
       </Link>
     </Menu.Item>
-    <Menu.Item key="/debugcontract">
+    <Menu.Item key="/tamagame">
       <Link
         onClick={() => {
-          props.setRoute('/debugcontract');
+          props.setRoute('/tamagame');
         }}
-        to="/debugcontract">
-        Debug Contract
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="/tamacontroller">
-      <Link
-        onClick={() => {
-          props.setRoute('/tamacontroller');
-        }}
-        to="/tamacontroller">
-        My Tama Controller
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="/hints">
-      <Link
-        onClick={() => {
-          props.setRoute('/hints');
-        }}
-        to="/hints">
-        Hints
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="/exampleui">
-      <Link
-        onClick={() => {
-          props.setRoute('/exampleui');
-        }}
-        to="/exampleui">
+        to="/tamagame">
         Tama Game
+      </Link>
+    </Menu.Item>
+    <Menu.Item key="/tamadex">
+      <Link
+        onClick={() => {
+          props.setRoute('/tamadex');
+        }}
+        to="/tamadex">
+        Tama DEX (Buy/Sell TAMA)
       </Link>
     </Menu.Item>
     <Menu.Item key="/tamamarket">
@@ -77,22 +59,13 @@ export const MainPageMenu: FC<IMainPageMenuProps> = (props) => (
         Tama Playground
       </Link>
     </Menu.Item>
-    <Menu.Item key="/mainnetdai">
+    <Menu.Item key="/debugcontract">
       <Link
         onClick={() => {
-          props.setRoute('/mainnetdai');
+          props.setRoute('/debugcontract');
         }}
-        to="/mainnetdai">
-        Mainnet DAI
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="/subgraph">
-      <Link
-        onClick={() => {
-          props.setRoute('/subgraph');
-        }}
-        to="/subgraph">
-        Subgraph
+        to="/debugcontract">
+        Debug Contract
       </Link>
     </Menu.Item>
   </Menu>
