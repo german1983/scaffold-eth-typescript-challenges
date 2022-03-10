@@ -16,8 +16,53 @@ import '@openzeppelin/contracts/access/Ownable.sol';
 /** SHOULD WE CONSIDER USING ERC1155 fot the containers as well? */
 /** We might want to take a lok at Covalient API (FREE) or NFT Port to get details from NFTs to be added to the Container */
 contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, ERC721URIStorage, IERC1155Receiver, Ownable {
+
+    struct AssignedTamaFriend{
+    uint256 blockadded;
+    address contractAddress; //contract of the erc721
+    uint256 tokenId; //token id of nft at addr
+    uint8 scale;
+
+   
+  }
+
+  mapping(uint256 => AssignedTamaFriend[]) public TamacharacterId;
+
+
+
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
+
+
+
+
+  function transferNFT(address contractAddress, uint256 tokenId, uint256 tankId, uint8 scale) external {
+    ERC721 nft = ERC721(contractAddress);
+    require(_isApprovedOrOwner(_msgSender(), tankId), "you need to own the tank");
+    require(contractAddress != address(this), "nice try!");
+    require(TamacharacterId[tankId].length < 2, "tank has reached the max limit of 1 components");
+
+    nft.transferFrom(_msgSender(), address(this), tokenId);
+    require(nft.ownerOf(tokenId) == address(this), "NFT not transferred");
+
+    bytes32 randish = keccak256(abi.encodePacked( blockhash(block.number-1), _msgSender(), address(this), tokenId, tankId  ));
+    TamacharacterId[tankId].push(AssignedTamaFriend(
+      block.number,
+      contractAddress,
+      tokenId,
+
+
+      scale));
+  }
+
+ 
+
+ 
+ 
+
+
+  
+
 
   function _beforeTokenTransfer(
     address from,

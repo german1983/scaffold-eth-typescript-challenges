@@ -4,9 +4,8 @@ import { lazier } from 'eth-hooks/helpers';
 // code is in the component file
 
 export const YourCollectibles = lazier(() => import('./your-collectibles/YourCollectibles'), 'YourCollectibles');
-export const ExampleUI = lazier(() => import('./exampleui/ExampleUI'), 'ExampleUI');
+export const TamaDEX = lazier(() => import('./tama-dex/TamaDex'), 'TamaDex');
+export const TamaConsole = lazier(() => import('./tamaconsole/TamaConsole'), 'TamaConsole');
 export const TamaMarket = lazier(() => import('./tamamarket/TamaMarket'), 'TamaMarket');
 export const TamaPlayground = lazier(() => import('./tamaplayground/TamaPlayground'), 'TamaPlayground');
 export const Checkout = lazier(() => import('./checkout/Checkout'), 'Checkout');
-export const Subgraph = lazier(() => import('./subgraph/Subgraph'), 'Subgraph');
-export const Hints = lazier(() => import('./hints/Hints'), 'Hints');

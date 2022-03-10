@@ -42,13 +42,14 @@ contract TamaFriend is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     return super.tokenURI(tokenId);
   }
 
-  function mintItem(address to, string memory tokenURIInput) public returns (uint256) {
+  function mintItem(string memory tokenURIAssigned) public returns (uint256) {
     _tokenIds.increment();
 
     uint256 id = _tokenIds.current();
-    _mint(to, id);
-    _setTokenURI(id, tokenURIInput);
+    _mint(msg.sender, id);
+    _setTokenURI(id, tokenURIAssigned);
 
     return id;
   }
+
 }

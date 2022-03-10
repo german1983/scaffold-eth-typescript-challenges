@@ -21,6 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface TamaControllerInterface extends ethers.utils.Interface {
   functions: {
+    "TamacharacterId(uint256,uint256)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
@@ -41,9 +42,14 @@ interface TamaControllerInterface extends ethers.utils.Interface {
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
+    "transferNFT(address,uint256,uint256,uint8)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "TamacharacterId",
+    values: [BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
@@ -110,10 +116,18 @@ interface TamaControllerInterface extends ethers.utils.Interface {
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "transferNFT",
+    values: [string, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "TamacharacterId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -168,6 +182,10 @@ interface TamaControllerInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferNFT",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -256,6 +274,19 @@ export class TamaController extends BaseContract {
   interface: TamaControllerInterface;
 
   functions: {
+    TamacharacterId(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, string, BigNumber, number] & {
+        blockadded: BigNumber;
+        contractAddress: string;
+        tokenId: BigNumber;
+        scale: number;
+      }
+    >;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -364,11 +395,32 @@ export class TamaController extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    transferNFT(
+      contractAddress: string,
+      tokenId: BigNumberish,
+      tankId: BigNumberish,
+      scale: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  TamacharacterId(
+    arg0: BigNumberish,
+    arg1: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, string, BigNumber, number] & {
+      blockadded: BigNumber;
+      contractAddress: string;
+      tokenId: BigNumber;
+      scale: number;
+    }
+  >;
 
   approve(
     to: string,
@@ -472,12 +524,33 @@ export class TamaController extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  transferNFT(
+    contractAddress: string,
+    tokenId: BigNumberish,
+    tankId: BigNumberish,
+    scale: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    TamacharacterId(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, string, BigNumber, number] & {
+        blockadded: BigNumber;
+        contractAddress: string;
+        tokenId: BigNumber;
+        scale: number;
+      }
+    >;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -578,6 +651,14 @@ export class TamaController extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    transferNFT(
+      contractAddress: string,
+      tokenId: BigNumberish,
+      tankId: BigNumberish,
+      scale: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
@@ -657,6 +738,12 @@ export class TamaController extends BaseContract {
   };
 
   estimateGas: {
+    TamacharacterId(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -765,6 +852,14 @@ export class TamaController extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    transferNFT(
+      contractAddress: string,
+      tokenId: BigNumberish,
+      tankId: BigNumberish,
+      scale: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -772,6 +867,12 @@ export class TamaController extends BaseContract {
   };
 
   populateTransaction: {
+    TamacharacterId(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -880,6 +981,14 @@ export class TamaController extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferNFT(
+      contractAddress: string,
+      tokenId: BigNumberish,
+      tankId: BigNumberish,
+      scale: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -1,6 +1,6 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { FC, useEffect, useState } from 'react';
-import { TamaController } from '~~/generated/contract-types';
+import { TamaFriend } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { useContractLoader, useContractReader } from 'eth-hooks';
@@ -39,11 +39,11 @@ export const YourCollectibles: FC<IYourCollectibleProps> = (props: IYourCollecti
   const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);
   const { mainnetProvider, blockExplorer, tx } = props;
 
-  const YourCollectibleRead = readContracts['TamaController'] as TamaController;
-  const YourCollectibleWrite = writeContracts['TamaController'] as TamaController;
+  const YourCollectibleRead = readContracts['TamaFriend'] as TamaFriend;
+  const YourCollectibleWrite = writeContracts['TamaFriend'] as TamaFriend;
 
   const balance = useContractReader<BigNumber[]>(YourCollectibleRead, {
-    contractName: 'TamaController',
+    contractName: 'TamaFriend',
     functionName: 'balanceOf',
     functionArgs: [ethersContext.account],
   });
