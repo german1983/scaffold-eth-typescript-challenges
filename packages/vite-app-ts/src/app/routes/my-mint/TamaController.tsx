@@ -12,6 +12,7 @@ import { Address, AddressInput } from 'eth-components/ant';
 import { TTransactor } from 'eth-components/functions';
 import { NFTStorage, Blob } from 'nft.storage';
 import { mintTemplate, TemplateProperties } from './TemplateTamaController';
+import { mintJson } from './mint';
 
 const NFT_STORAGE_TOKEN = process.env.NFT_STORAGE_API_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDM4MjYwYTczQzI1ODZEODMxODlmMEQ2M0Q5NUZlYUVDNWY1NDU0ZmQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY0NjU5ODE3OTUwMywibmFtZSI6IlRhbWF2ZXJzZSJ9.na-vsUo7qamdGSrvOCqGbKSE0m4h2MdT-n6_BSQx15I';
 const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
