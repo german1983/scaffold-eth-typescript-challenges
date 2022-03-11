@@ -29,7 +29,7 @@ export function brigthenColor(color: string, brigtness: any) {
   return '' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
-export async function storeExampleNFT(options : any | undefined) {
+export async function storeExampleNFT(options: any | undefined) {
   const toMint = mintTemplate(options);
   const image = toMint.image;
   console.log("Image being minted (base64): ", image);
@@ -38,7 +38,7 @@ export async function storeExampleNFT(options : any | undefined) {
   const cid = await client.storeBlob(someData)
   return cid;
 }
-export function mintTemplate(options : any) {
+export function mintTemplate(options: any) {
   console.log('PERFORMING TRANSACTION WITH CUSTOMIZABLE');
   console.log(options);
   var decoded = unescape(encodeURIComponent(options));
