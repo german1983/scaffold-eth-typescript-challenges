@@ -8,4 +8,5 @@ export const TamaDEX = lazier(() => import('./tama-dex/TamaDex'), 'TamaDex');
 export const TamaConsole = lazier(() => import('./tamaconsole/TamaConsole'), 'TamaConsole');
 export const TamaMarket = lazier(() => import('./tamamarket/TamaMarket'), 'TamaMarket');
 export const TamaPlayground = lazier(() => import('./tamaplayground/TamaPlayground'), 'TamaPlayground');
+export const TamaMichael = lazier(() => import('./TamaMichael/TamaMichael'), 'TamaMichael');
 export const Checkout = lazier(() => import('./checkout/Checkout'), 'Checkout');

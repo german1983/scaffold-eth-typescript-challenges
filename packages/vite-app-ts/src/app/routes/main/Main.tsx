@@ -6,7 +6,7 @@ import { useGasPrice, useContractLoader, useContractReader, useBalance } from 'e
 import { useDexEthPrice } from 'eth-hooks/dapps';
 
 import { GenericContract } from 'eth-components/ant/generic-contract';
-import { TamaConsole, YourCollectibles, TamaMarket, TamaPlayground, TamaDEX } from '~~/app/routes';
+import { TamaConsole, YourCollectibles, TamaMarket, TamaPlayground, TamaDEX, TamaMichael } from '~~/app/routes';
 import { transactor } from 'eth-components/functions';
 
 import { ethers } from 'ethers';
@@ -147,6 +147,13 @@ export const Main: FC = () => {
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               yourCurrentBalance={yourCurrentBalance}
               price={ethPrice}
+            />
+          </Route>
+          <Route path="/tamamichael">
+            <TamaMichael
+              mainnetProvider={scaffoldAppProviders.mainnetProvider}
+              blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
+              tx={tx}
             />
           </Route>
         </Switch>
