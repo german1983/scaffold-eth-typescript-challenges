@@ -1,27 +1,21 @@
-import { SyncOutlined } from '@ant-design/icons';
-import { formatEther, parseEther } from '@ethersproject/units';
-import { Button, Card, DatePicker, Divider, Input, List, Progress, Slider, Spin, Switch } from 'antd';
-import { Signer, Contract } from 'ethers';
-import React, { useState, FC, useContext, useEffect, useRef, ReactElement } from 'react';
+import { useState, FC, useContext, useEffect, useRef } from 'react';
 
 import { BigNumber, ethers } from 'ethers';
 import { GameMenu, IShapeObject, shapes } from './components/Menu';
 
-import { Address, Balance } from 'eth-components/ant';
 import { transactor, TTransactor } from 'eth-components/functions';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { useEthersContext } from 'eth-hooks/context';
-import { useContractLoader, useContractReader, useEventListener, useGasPrice } from 'eth-hooks';
+import { useContractLoader, useContractReader, useGasPrice } from 'eth-hooks';
 import { create } from 'ipfs-http-client';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
-import { Tamagotchi } from './components/Tamagotchi';
 import './styles.less';
 import { TamaController } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
-import ReactDOMServer from 'react-dom/server';
 import { TamaConsole } from './components/TamaConsole';
 import { consoleConfigs } from './utils';
+
 const basicColorSetup = {
   backColor: '3ca9de',
   middleColor: '90c6d6',
@@ -63,7 +57,7 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
   const TamaControllerRead = readContracts['TamaController'] as TamaController;
   const TamaControllerWrite = writeContracts['TamaController'] as TamaController;
 
-  const [currentConsole, setCurrentConsole] = useState(undefined);
+  const [currentConsole, setCurrentConsole] = useState<any>(undefined);
 
   const toMint = useRef<any>();
   toMint.current = currentConsole;
@@ -130,13 +124,13 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
       }
       //temporary map
       let temp = collectibleUpdate.map((item) => {
-          let attributes = item.attributes;   
-          return {
-              ...item,
-              attributes : consoleConfigs[item.id.toNumber()]
-          }
+        let attributes = item.attributes;
+        return {
+          ...item,
+          attributes: consoleConfigs[item.id.toNumber()]
+        }
       })
-    //   console.log("UPDATING CONSOLE LIST",temp);
+      //   console.log("UPDATING CONSOLE LIST",temp);
       setConsoleList(temp);
     };
     updateTamaControllers();
@@ -147,12 +141,12 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
 
   return connected ? (
     <div className="mainWrapper">
-      {consoleList[currentConsole] &&<div className="tamaWrapper"> 
-         <img className="console--img" src={consoleList[currentConsole].image}></img>
+      {consoleList[currentConsole] && <div className="tamaWrapper">
+        <img className="console--img" src={consoleList[currentConsole].image}></img>
         <TamaConsole
-        consoleConfig={consoleList[currentConsole].attributes}
+          consoleConfig={consoleList[currentConsole].attributes}
         ></TamaConsole></div>}
-      
+
       <div className="menuWrapper">
         <div className="menuTitle">PLAYGROUND</div>
         <GameMenu

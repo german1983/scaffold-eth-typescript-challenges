@@ -1,4 +1,4 @@
-export const consoleConfigs = {
+export const consoleConfigs: { [key: number]: Object } = {
   1: {
     consolex: 112.19,
     consoley: 136.48,
@@ -35,7 +35,7 @@ export const consoleConfigs = {
   },
 };
 
-export function calcLoc(config: Object) {
+export function calcLoc(config: any) {
   let mult = 520 / config.consolex;
   let new_screenw = config.screenw * mult;
   let new_screenh = config.screenh * mult;

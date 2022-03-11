@@ -174,7 +174,7 @@ export const GameMenu: FC<IMenu> = (props) => {
             }}></input>
         </li>
       </ul>
-      <div className="submenu" style={{'padding-top':'1rem','font-size':'15px'}}>Learn more about Tama</div>
+      <div className="submenu" style={{ paddingTop: '1rem', fontSize: '15px' }}>Learn more about Tama</div>
     </div>
   );
 };

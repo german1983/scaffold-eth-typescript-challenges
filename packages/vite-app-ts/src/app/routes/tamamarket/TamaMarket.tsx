@@ -94,33 +94,33 @@ export const TamaMarket: FC<ITamaMarketProps> = (props) => {
   }
 
   const Input = () => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: any) => {
       if (event.key === 'Enter') {
         onHandleSearch(searchInput)
         // console.log('searching for this value',searchInput)
       }
     }
-  
+
     // return <div className="marketInput">
-      return <textarea className="marketInput searchBar" key={reloadSearchBar} onKeyDown={handleKeyDown} placeholder='SEARCH IN NFT PORT' value={searchInput} onChange={(event) => setSearchInput(event.target.value)} />
-      // </div>
+    return <textarea className="marketInput searchBar" onKeyDown={handleKeyDown} placeholder='SEARCH IN NFT PORT' value={searchInput} onChange={(event) => setSearchInput(event.target.value)} />
+    // </div>
   }
 
-  return ( <div className="marketMainWrapper">
-      <div className="marketBackground"></div>
-      <div className="marketContainer">
-        <div className="container--logo">
-          <img className="invert" src={marketLogo} />
-        </div>
-        <div className="searchLabel market-wrapper">
-          {/* <div className='searchLabel'> */}
-            {Input()}
-            <label className="marketInput submit" onClick={async () => { onHandleSearch(searchInput) }}>{buttonSearch}</label>
-          {/* </div */}
-        </div>
-        <NavBar marketFields={marketFields} setSearchFilter={setSearchFilter}></NavBar>
-        <ResultsBox resultList={searchResults}></ResultsBox>
+  return (<div className="marketMainWrapper">
+    <div className="marketBackground"></div>
+    <div className="marketContainer">
+      <div className="container--logo">
+        <img className="invert" src={marketLogo} />
       </div>
+      <div className="searchLabel market-wrapper">
+        {/* <div className='searchLabel'> */}
+        {Input()}
+        <label className="marketInput submit" onClick={async () => { onHandleSearch(searchInput) }}>{buttonSearch}</label>
+        {/* </div */}
+      </div>
+      <NavBar marketFields={marketFields} setSearchFilter={setSearchFilter}></NavBar>
+      <ResultsBox resultList={searchResults}></ResultsBox>
     </div>
+  </div>
   );
 };
