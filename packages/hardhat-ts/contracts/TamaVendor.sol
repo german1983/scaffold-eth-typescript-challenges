@@ -61,11 +61,23 @@ contract TamaDEX {
     return (eth_amount, token_amount);
   }
 
+  function ethToTokenPrice(uint256 eth) public view returns (uint256) {
+    return price(eth, address(this).balance - eth, token.balanceOf(address(this)));
+  }
+
+  function tokenToEthPrice(uint256 tokens) public view returns (uint256) {
+    return price(tokens, token.balanceOf(address(this)), address(this).balance);
+  }
+
+  function getBalance() public view returns (uint256) {
+    return address(this).balance;
+  }
+
   function price(
     uint256 input_amount,
     uint256 input_reserve,
     uint256 output_reserve
-  ) public pure returns (uint256) {
+  ) private pure returns (uint256) {
     uint256 input_amount_with_fee = input_amount * 997;
     uint256 numerator = input_amount_with_fee * output_reserve;
     uint256 denominator = input_reserve * 1000 + input_amount_with_fee;

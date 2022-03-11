@@ -485,7 +485,7 @@
       "chainId": "31337",
       "contracts": {
         "TamaCollectibles": {
-          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          "address": "0xf5059a5D33d5853360D16C683c16e67980206f36",
           "abi": [
             {
               "inputs": [],
@@ -872,7 +872,7 @@
           ]
         },
         "TamaController": {
-          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+          "address": "0x95401dc811bb5740090279Ba06cfA8fcF6113778",
           "abi": [
             {
               "anonymous": false,
@@ -1479,7 +1479,7 @@
           ]
         },
         "TamaToken": {
-          "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+          "address": "0x998abeb3E57409262aE5b751f60747921B33613E",
           "abi": [
             {
               "inputs": [],
@@ -1759,7 +1759,7 @@
           ]
         },
         "TamaDEX": {
-          "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+          "address": "0x70e0bA845a1A0F2DA3359C97E0285013525FFC49",
           "abi": [
             {
               "inputs": [
@@ -1796,6 +1796,38 @@
                 }
               ],
               "stateMutability": "payable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "eth",
+                  "type": "uint256"
+                }
+              ],
+              "name": "ethToTokenPrice",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "getBalance",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
@@ -1840,35 +1872,6 @@
               "inputs": [
                 {
                   "internalType": "uint256",
-                  "name": "input_amount",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "input_reserve",
-                  "type": "uint256"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "output_reserve",
-                  "type": "uint256"
-                }
-              ],
-              "name": "price",
-              "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
-              ],
-              "stateMutability": "pure",
-              "type": "function"
-            },
-            {
-              "inputs": [
-                {
-                  "internalType": "uint256",
                   "name": "tokens",
                   "type": "uint256"
                 }
@@ -1882,6 +1885,25 @@
                 }
               ],
               "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "tokens",
+                  "type": "uint256"
+                }
+              ],
+              "name": "tokenToEthPrice",
+              "outputs": [
+                {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+                }
+              ],
+              "stateMutability": "view",
               "type": "function"
             },
             {
@@ -1924,7 +1946,7 @@
           ]
         },
         "TamaFriend": {
-          "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+          "address": "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
           "abi": [
             {
               "inputs": [],

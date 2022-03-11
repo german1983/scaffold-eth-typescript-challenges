@@ -6,7 +6,7 @@ import { useGasPrice, useContractLoader, useContractReader, useBalance } from 'e
 import { useDexEthPrice } from 'eth-hooks/dapps';
 
 import { GenericContract } from 'eth-components/ant/generic-contract';
-import { TamaConsole, YourCollectibles, TamaMarket, TamaPlayground, TamaDEX, TamaMichael } from '~~/app/routes';
+import { TamaConsole, YourCollectibles, TamaMarket, TamaPlayground, TamaVendor, TamaMichael } from '~~/app/routes';
 import { transactor } from 'eth-components/functions';
 
 import { ethers } from 'ethers';
@@ -24,7 +24,7 @@ import { mainnetProvider } from '~~/config/providersConfig';
 // import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
-import { TamaDex } from '../tama-dex/TamaDex';
+import { TamaDEX, TamaToken } from '~~/generated/contract-types';
 
 export const DEBUG = false;
 
@@ -109,15 +109,16 @@ export const Main: FC = () => {
             />
           </Route>
           <Route path="/tamadex">
-            <TamaDEX
+            <TamaVendor
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               address={ethersContext.account}
               yourCurrentBalance={yourCurrentBalance}
               price={ethPrice}
               tx={tx}
-              readContracts={readContracts}
-              writeContracts={writeContracts}
-            // example how to directly load the contracts from here: contract={mainnetContracts?.['DAI']}
+              tamaDexRead={readContracts['TamaDEX'] as TamaDEX}
+              tamaDexWrite={writeContracts['TamaDEX'] as TamaDEX}
+              tamaTokenRead={readContracts['TamaToken'] as TamaToken}
+              tamaTokenWrite={writeContracts['TamaToken'] as TamaToken}
             />
           </Route>
           <Route exact path="/debugcontract">

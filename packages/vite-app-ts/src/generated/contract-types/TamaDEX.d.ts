@@ -24,10 +24,12 @@ interface TamaDEXInterface extends ethers.utils.Interface {
   functions: {
     "deposit()": FunctionFragment;
     "ethToToken()": FunctionFragment;
+    "ethToTokenPrice(uint256)": FunctionFragment;
+    "getBalance()": FunctionFragment;
     "init(uint256)": FunctionFragment;
     "liquidity(address)": FunctionFragment;
-    "price(uint256,uint256,uint256)": FunctionFragment;
     "tokenToEth(uint256)": FunctionFragment;
+    "tokenToEthPrice(uint256)": FunctionFragment;
     "totalLiquidity()": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
   };
@@ -37,14 +39,22 @@ interface TamaDEXInterface extends ethers.utils.Interface {
     functionFragment: "ethToToken",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "ethToTokenPrice",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getBalance",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "init", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "liquidity", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "price",
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    functionFragment: "tokenToEth",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "tokenToEth",
+    functionFragment: "tokenToEthPrice",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -58,10 +68,18 @@ interface TamaDEXInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ethToToken", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "ethToTokenPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getBalance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "init", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "liquidity", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "price", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenToEth", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "tokenToEthPrice",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "totalLiquidity",
     data: BytesLike
@@ -123,6 +141,13 @@ export class TamaDEX extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    ethToTokenPrice(
+      eth: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     init(
       tokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -130,17 +155,15 @@ export class TamaDEX extends BaseContract {
 
     liquidity(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    price(
-      input_amount: BigNumberish,
-      input_reserve: BigNumberish,
-      output_reserve: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     tokenToEth(
       tokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    tokenToEthPrice(
+      tokens: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     totalLiquidity(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -158,6 +181,13 @@ export class TamaDEX extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  ethToTokenPrice(
+    eth: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
   init(
     tokens: BigNumberish,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -165,17 +195,15 @@ export class TamaDEX extends BaseContract {
 
   liquidity(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  price(
-    input_amount: BigNumberish,
-    input_reserve: BigNumberish,
-    output_reserve: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   tokenToEth(
     tokens: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  tokenToEthPrice(
+    tokens: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   totalLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -189,18 +217,23 @@ export class TamaDEX extends BaseContract {
 
     ethToToken(overrides?: CallOverrides): Promise<BigNumber>;
 
+    ethToTokenPrice(
+      eth: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     init(tokens: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     liquidity(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    price(
-      input_amount: BigNumberish,
-      input_reserve: BigNumberish,
-      output_reserve: BigNumberish,
+    tokenToEth(
+      tokens: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    tokenToEth(
+    tokenToEthPrice(
       tokens: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -224,6 +257,13 @@ export class TamaDEX extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    ethToTokenPrice(
+      eth: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getBalance(overrides?: CallOverrides): Promise<BigNumber>;
+
     init(
       tokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -231,16 +271,14 @@ export class TamaDEX extends BaseContract {
 
     liquidity(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    price(
-      input_amount: BigNumberish,
-      input_reserve: BigNumberish,
-      output_reserve: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     tokenToEth(
       tokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    tokenToEthPrice(
+      tokens: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     totalLiquidity(overrides?: CallOverrides): Promise<BigNumber>;
@@ -260,6 +298,13 @@ export class TamaDEX extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    ethToTokenPrice(
+      eth: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     init(
       tokens: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -270,16 +315,14 @@ export class TamaDEX extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    price(
-      input_amount: BigNumberish,
-      input_reserve: BigNumberish,
-      output_reserve: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     tokenToEth(
       tokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    tokenToEthPrice(
+      tokens: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     totalLiquidity(overrides?: CallOverrides): Promise<PopulatedTransaction>;
