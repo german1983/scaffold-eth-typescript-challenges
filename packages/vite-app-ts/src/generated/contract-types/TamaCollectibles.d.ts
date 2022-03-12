@@ -21,9 +21,9 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface TamaCollectiblesInterface extends ethers.utils.Interface {
   functions: {
-    "GOLD()": FunctionFragment;
+    "APPLE()": FunctionFragment;
+    "BANANA()": FunctionFragment;
     "SHIELD()": FunctionFragment;
-    "SILVER()": FunctionFragment;
     "SWORD()": FunctionFragment;
     "THORS_HAMMER()": FunctionFragment;
     "balanceOf(address,uint256)": FunctionFragment;
@@ -36,9 +36,9 @@ interface TamaCollectiblesInterface extends ethers.utils.Interface {
     "uri(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "GOLD", values?: undefined): string;
+  encodeFunctionData(functionFragment: "APPLE", values?: undefined): string;
+  encodeFunctionData(functionFragment: "BANANA", values?: undefined): string;
   encodeFunctionData(functionFragment: "SHIELD", values?: undefined): string;
-  encodeFunctionData(functionFragment: "SILVER", values?: undefined): string;
   encodeFunctionData(functionFragment: "SWORD", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "THORS_HAMMER",
@@ -74,9 +74,9 @@ interface TamaCollectiblesInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "uri", values: [BigNumberish]): string;
 
-  decodeFunctionResult(functionFragment: "GOLD", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "APPLE", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "BANANA", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "SHIELD", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "SILVER", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "SWORD", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "THORS_HAMMER",
@@ -198,11 +198,11 @@ export class TamaCollectibles extends BaseContract {
   interface: TamaCollectiblesInterface;
 
   functions: {
-    GOLD(overrides?: CallOverrides): Promise<[BigNumber]>;
+    APPLE(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    BANANA(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     SHIELD(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    SILVER(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     SWORD(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -258,11 +258,11 @@ export class TamaCollectibles extends BaseContract {
     uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
   };
 
-  GOLD(overrides?: CallOverrides): Promise<BigNumber>;
+  APPLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+  BANANA(overrides?: CallOverrides): Promise<BigNumber>;
 
   SHIELD(overrides?: CallOverrides): Promise<BigNumber>;
-
-  SILVER(overrides?: CallOverrides): Promise<BigNumber>;
 
   SWORD(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -318,11 +318,11 @@ export class TamaCollectibles extends BaseContract {
   uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
-    GOLD(overrides?: CallOverrides): Promise<BigNumber>;
+    APPLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    BANANA(overrides?: CallOverrides): Promise<BigNumber>;
 
     SHIELD(overrides?: CallOverrides): Promise<BigNumber>;
-
-    SILVER(overrides?: CallOverrides): Promise<BigNumber>;
 
     SWORD(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -477,11 +477,11 @@ export class TamaCollectibles extends BaseContract {
   };
 
   estimateGas: {
-    GOLD(overrides?: CallOverrides): Promise<BigNumber>;
+    APPLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    BANANA(overrides?: CallOverrides): Promise<BigNumber>;
 
     SHIELD(overrides?: CallOverrides): Promise<BigNumber>;
-
-    SILVER(overrides?: CallOverrides): Promise<BigNumber>;
 
     SWORD(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -538,11 +538,11 @@ export class TamaCollectibles extends BaseContract {
   };
 
   populateTransaction: {
-    GOLD(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    APPLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    BANANA(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     SHIELD(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    SILVER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     SWORD(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

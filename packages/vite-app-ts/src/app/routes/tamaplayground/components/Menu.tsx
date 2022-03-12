@@ -38,9 +38,9 @@ interface IMenu {
   shapeList: Array<IShapeObject>;
   setCurrentConsole: any;
   currentConsole: any;
-  wallet : Array<object>;
-  walletChooseType : string;
-  useItemFromWallet : Function
+  wallet: Array<any>;
+  walletChooseType: string;
+  useItemFromWallet: Function
 }
 export const GameMenu: FC<IMenu> = (props) => {
   const [newPurpose, setNewPurpose] = useState('loading...');
@@ -118,11 +118,11 @@ export const GameMenu: FC<IMenu> = (props) => {
     setCurrentConsole(index);
   };
 
-  const onClickItem = (item = Object) =>{
+  const onClickItem = (item: any) => {
 
-    console.log('clicked',item)
+    console.log('clicked', item)
     console.log(walletChooseType)
-    if(item.type == walletChooseType){
+    if (item.type == walletChooseType) {
 
       console.log('performing consume', item);
       useItemFromWallet(item);
@@ -143,10 +143,10 @@ export const GameMenu: FC<IMenu> = (props) => {
       <div className="submenu">Wallet</div>
       <ul className="ul2">
         {wallet.map((item) => {
-          return (<li className='walletLi' onClick={()=> {onClickItem(item)}}>
-          <label>{item.name}</label>
-          <label className='walletItemInfo'>{item.value}</label>
-        </li>)
+          return (<li className='walletLi' onClick={() => { onClickItem(item) }}>
+            <label>{item.name}</label>
+            <label className='walletItemInfo'>{item.value}</label>
+          </li>)
         })}
       </ul>
       <div className="submenu" style={{ paddingTop: '1rem', fontSize: '15px' }}>Learn more about Tama</div>

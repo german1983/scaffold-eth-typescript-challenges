@@ -17,7 +17,7 @@ import { TamaConsole } from './components/TamaConsole';
 import { consoleConfigs } from './utils';
 import { sampleWallet } from './utils';
 
-import {TRAVEL, FOOD} from './utils'
+import { TRAVEL, FOOD } from './utils'
 
 const basicColorSetup = {
   backColor: '3ca9de',
@@ -65,7 +65,7 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
   const [consoleBackground, setConsoleBackground] = useState(undefined);
 
 
-  const [walletChooseType , onWalletChooseType] = useState('none');
+  const [walletChooseType, onWalletChooseType] = useState('none');
 
   const toMint = useRef<any>();
   toMint.current = currentConsole;
@@ -101,26 +101,26 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
     else connect(false);
   }, [ethersContext.account]);
 
-  const useItemFromWallet = (item) => {
-      //PERFORM TRANSACTION TO USE ITEM IN CONTRACT
-      //if transaction sucessful, update state in UI, state will be updated automatically from contract or using UI ( tbd )
-      //if all good, a pop up image will appear in the UI of the item being consumed ( if its food ), or the new background will appear, if its travel;
+  const useItemFromWallet = (item: any) => {
+    //PERFORM TRANSACTION TO USE ITEM IN CONTRACT
+    //if transaction sucessful, update state in UI, state will be updated automatically from contract or using UI ( tbd )
+    //if all good, a pop up image will appear in the UI of the item being consumed ( if its food ), or the new background will appear, if its travel;
 
-      //udpate wallet, wallet should update by itself from blockchain
-      let otherItems = wallet.filter(ind => !(ind.value == item.value &&ind.name == item.name && ind.type == item.type && ind.id == item.id));
-      updateWallet(otherItems);
-      if(item.type == FOOD){
-        setItemUsed(item);
-      }
-      if(item.type == TRAVEL){
-          setConsoleBackground(item.uri);
-      }
+    //udpate wallet, wallet should update by itself from blockchain
+    let otherItems = wallet.filter((ind: any) => !(ind.value == item.value && ind.name == item.name && ind.type == item.type && ind.id == item.id));
+    updateWallet(otherItems);
+    if (item.type == FOOD) {
+      setItemUsed(item);
+    }
+    if (item.type == TRAVEL) {
+      setConsoleBackground(item.uri);
+    }
 
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log('setting new console background', consoleBackground);
-  },[consoleBackground])
+  }, [consoleBackground])
 
   useEffect(() => {
     const updateTamaControllers = async () => {
@@ -129,6 +129,7 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
       const yourBalance = balance[0]?.toNumber() ?? 0;
       for (let tokenIndex = 0; tokenIndex < yourBalance; tokenIndex++) {
         try {
+          if (ethersContext.account == undefined) return;
           console.log('Getting token index', tokenIndex);
           const tokenId = await TamaControllerRead.tokenOfOwnerByIndex(ethersContext.account ?? '', tokenIndex);
           console.log('tokenId', tokenId);
@@ -145,7 +146,7 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
             const ipfsObject = JSON.parse(content);
             const characterObject = JSON.parse(characterContent)
             console.log('ipfsObject', ipfsObject);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: ethersContext.account, character : characterObject ,...ipfsObject });
+            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: ethersContext.account, character: characterObject, ...ipfsObject });
           } catch (e) {
             console.log(e);
           }
@@ -160,7 +161,7 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
           attributes: consoleConfigs[item.name]
         }
       })
-        console.log("UPDATING CONSOLE LIST",temp);
+      console.log("UPDATING CONSOLE LIST", temp);
       setConsoleList(temp);
     };
     updateTamaControllers();
@@ -176,10 +177,10 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
         <img className="console--img" src={consoleList[currentConsole].image}></img>
         <TamaConsole
           consoleConfig={consoleList[currentConsole].attributes}
-          tamaCharacter = {consoleList[currentConsole].character}
-          onWalletChooseType = {onWalletChooseType}
-          listenItemUsed = {listenItemUsed }
-          consoleBackground = {consoleBackground}
+          tamaCharacter={consoleList[currentConsole].character}
+          onWalletChooseType={onWalletChooseType}
+          listenItemUsed={listenItemUsed}
+          consoleBackground={consoleBackground}
         ></TamaConsole></div>}
       <div className="menuWrapper">
         <div className="menuTitle">PLAYGROUND</div>

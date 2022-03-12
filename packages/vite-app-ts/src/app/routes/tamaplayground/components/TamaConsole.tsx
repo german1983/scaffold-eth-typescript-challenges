@@ -7,25 +7,25 @@ import sampleTravel from './travel.jpeg';
 import happyEmoji from '../assets/emojis/happy.png';
 import sadEmoji from '../assets/emojis/sad.png';
 import normalEmoji from '../assets/emojis/normal.png';
-import { calcLoc, MOVE_UPDATE_INTERVAL, MOVE_DURATION} from '../utils';
+import { calcLoc, MOVE_UPDATE_INTERVAL, MOVE_DURATION } from '../utils';
 const move = ['none', 'move1', 'move2'];
 
 export interface ITamaConsole {
   consoleConfig: Object;
-  tamaCharacter : Object;
-  onWalletChooseType : Function;
-  listenItemUsed : Object | undefined;
-  consoleBackground : string | undefined;
+  tamaCharacter: any;
+  onWalletChooseType: Function;
+  listenItemUsed: any | undefined;
+  consoleBackground: string | undefined;
 }
 export const TamaConsole: FC<ITamaConsole> = (props) => {
-    const onWalletChooseType = props.onWalletChooseType;
+  const onWalletChooseType = props.onWalletChooseType;
   const consoleConfig = props.consoleConfig;
   const tamaCharacter = props.tamaCharacter;
   const listenItemUsed = props.listenItemUsed;
   const [currMove, setCurrMove] = useState(undefined || Object);
   const [itemsConsumed, setItemsConsumed] = useState(0);
 
-  const countRef = useRef();
+  const countRef = useRef<any>();
   countRef.current = itemsConsumed;
 
   useEffect(() => {
@@ -33,11 +33,11 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
       const path = Math.floor(Math.random() * 3);
       const time = Math.floor(Math.random() * 10 + 5);
       const rotate_speed = Math.floor(Math.random() * 5 + 2);
-    
+
       const newOptions = {
-          path : move[path],
-          time : `${time}s`,
-          rotate_speed : `0.${rotate_speed}s`,
+        path: move[path],
+        time: `${time}s`,
+        rotate_speed: `0.${rotate_speed}s`,
       }
       console.log('current moment', newOptions);
       setCurrMove(newOptions);
@@ -45,9 +45,9 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(()=>{
-    setItemsConsumed(countRef.current+1);
-    console.log('consuming in console',listenItemUsed);
+  useEffect(() => {
+    setItemsConsumed(countRef.current + 1);
+    console.log('consuming in console', listenItemUsed);
   }, [listenItemUsed])
 
   const [new_screenx,
@@ -64,15 +64,15 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
     new_button3y,
     new_button3w,] = calcLoc(consoleConfig);
 
-    const onClickEat = ()=>{
-        onWalletChooseType('food');
-    }
-    const onClickTravel = ()=>{
-        onWalletChooseType('travel');
-    }
-    const onClickPlay = ()=>{
-        // onWalletChooseType('Travel');
-    }
+  const onClickEat = () => {
+    onWalletChooseType('food');
+  }
+  const onClickTravel = () => {
+    onWalletChooseType('travel');
+  }
+  const onClickPlay = () => {
+    // onWalletChooseType('Travel');
+  }
   return (
     <div className="ConsoleMain">
       <div
@@ -87,21 +87,21 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
             height: '30%',
             animation: `${currMove.path} ${currMove.time}`,
           }}>
-          <img className="tamaFriend" src={tamaCharacter.image} style={{ 
-  animation: `rotate ${currMove.rotate_speed} infinite`
+          <img className="tamaFriend" src={tamaCharacter.image} style={{
+            animation: `rotate ${currMove.rotate_speed} infinite`
           }}></img>
-          {listenItemUsed && <img key={itemsConsumed} className = "popupImage" src = {listenItemUsed.uri}></img>}
-          <img className = "textCloud" src = {expHolder}></img>
-          <img className = "emoji" src = {normalEmoji}></img>
+          {listenItemUsed && <img key={itemsConsumed} className="popupImage" src={listenItemUsed.uri}></img>}
+          <img className="textCloud" src={expHolder}></img>
+          <img className="emoji" src={normalEmoji}></img>
           {/* <div className='emoji expText'>ZZZ</div> */}
         </div>
       </div>
-      <div className='consoleButton' style ={{'width':`${new_button1w}px`,'height':`${new_button1w}px`,'transform' : `translate(${new_button1x}px,${new_button1y}px`}} onClick={()=>{onClickEat()}}>
-        </div>
-        <div className='consoleButton' style ={{'width':`${new_button2w}px`,'height':`${new_button2w}px`,'transform' : `translate(${new_button2x}px,${new_button2y}px`}} onClick={()=>{onClickPlay()}}>
-        </div>
-        <div className='consoleButton' style ={{'width':`${new_button3w}px`,'height':`${new_button3w}px`,'transform' : `translate(${new_button3x}px,${new_button3y}px`}} onClick={()=>{onClickTravel()}}>
-        </div>
+      <div className='consoleButton' style={{ 'width': `${new_button1w}px`, 'height': `${new_button1w}px`, 'transform': `translate(${new_button1x}px,${new_button1y}px` }} onClick={() => { onClickEat() }}>
+      </div>
+      <div className='consoleButton' style={{ 'width': `${new_button2w}px`, 'height': `${new_button2w}px`, 'transform': `translate(${new_button2x}px,${new_button2y}px` }} onClick={() => { onClickPlay() }}>
+      </div>
+      <div className='consoleButton' style={{ 'width': `${new_button3w}px`, 'height': `${new_button3w}px`, 'transform': `translate(${new_button3x}px,${new_button3y}px` }} onClick={() => { onClickTravel() }}>
+      </div>
     </div>
   );
 };
