@@ -8,15 +8,23 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironmentExtended) => {
   const { deployer } = await getNamedAccounts();
 
   // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+  await deploy("TamaCollectiblesBurner", {
+    from: deployer,
+    // args: [tameCollectibles.address, tameTokens.address],
+    log: true,
+  });
+  const tameCollectiblesBurner = await ethers.getContract("TamaCollectiblesBurner", deployer);
+
   await deploy('TamaCollectibles', {
     from: deployer,
     // args: ["Hello"],
     log: true,
   });
+  const tameCollectibles = await ethers.getContract("TamaCollectibles", deployer);
 
   await deploy('TamaController', {
     from: deployer,
-    // args: ["Hello"],
+    args: [tameCollectibles.address, tameCollectiblesBurner.address],
     log: true,
   });
 
@@ -42,15 +50,24 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironmentExtended) => {
   await tameTokens.approve(tamaDEX.address, ethers.utils.parseEther('100'));
 
   console.log("INIT exchange...")
-  await tamaDEX.init("" + (3 * 10 ** 18), { value: ethers.utils.parseEther('3'), gasLimit: 200000 })
-
+  await tamaDEX.init("" + (3 * 10 ** 18), { value: ethers.utils.parseEther('0.03'), gasLimit: 20000000 })
 
   await deploy("TamaFriend", {
     from: deployer,
     log: true,
   });
 
+  await deploy("TamaCollectiblesVendor", {
+    from: deployer,
+    args: [tameCollectibles.address, tameTokens.address],
+    log: true,
+  });
+  const tamaCollectiblesVendor = await ethers.getContract("TamaCollectiblesVendor", deployer);
+  await tameCollectibles.init(tamaCollectiblesVendor.address);
+
+
+
 };
 
 export default func;
-func.tags = ['TamaCollectibles', 'TamaController', 'TamaDEX', 'TamaToken', 'TamaFriend'];
+func.tags = ['TamaCollectibles', 'TamaController', 'TamaDEX', 'TamaToken', 'TamaFriend', 'TamaCollectiblesVendor', 'TamaCollectiblesBurner'];

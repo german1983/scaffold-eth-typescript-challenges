@@ -4,11 +4,10 @@ pragma solidity ^0.8.12;
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
+import '@openzeppelin/contracts/token/ERC1155/IERC1155.sol';
 import '@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
-import './TamaCharacter.sol';
-
 
 /**
  * The TAMC ERC721 will be a free-to-mint NFT randomly generated on-chain
@@ -19,13 +18,20 @@ import './TamaCharacter.sol';
 /** We might want to take a lok at Covalient API (FREE) or NFT Port to get details from NFTs to be added to the Container */
 contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, ERC721URIStorage, IERC1155Receiver, Ownable {
   //initializing variables for the death of a tamacharacter!
+  IERC1155 consumables;
+  address public _consumablesBurnerAddress;
+
+  constructor(address consumablesAddress, address consumablesBurnerAddress) {
+    consumables = IERC1155(consumablesAddress);
+    _consumablesBurnerAddress = consumablesBurnerAddress;
+  }
 
   uint256 feedingblock;
+  uint256 hungryblock;
 
   uint8 hungry;
 
-
-    struct AssignedTamaFriend{
+  struct AssignedTamaFriend {
     string name;
     uint256 blockadded;
     address contractAddress; //contract of the erc721
@@ -37,10 +43,6 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     bool created;
     bool isAlive;
     uint8 length;
-   
-   
-
-   
   }
 
   struct consoleData {
@@ -48,99 +50,118 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     address contractAddress;
   }
 
- 
   mapping(uint256 => AssignedTamaFriend) public TamacharacterId;
   mapping(uint256 => consoleData) public consoletoData;
 
-
-    function tamafriendOf(uint256 tokenId) public view returns (AssignedTamaFriend memory) {
-      AssignedTamaFriend memory TamacharacterIdInController = TamacharacterId[tokenId];
-      // require(AssignedTamaFriend != address(0), "ERC721: owner query for nonexistent token");
-      return TamacharacterIdInController;
+  function tamafriendOf(uint256 tokenId) public view returns (AssignedTamaFriend memory) {
+    AssignedTamaFriend memory TamacharacterIdInController = TamacharacterId[tokenId];
+    // require(AssignedTamaFriend != address(0), "ERC721: owner query for nonexistent token");
+    return TamacharacterIdInController;
   }
-
-
 
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
+  //functions and getters for creating and feeding a character
+  function createChar(
+    uint256 tokenId,
+    string memory _name,
+    address importContract,
+    uint256 importId
+  ) public returns (string memory) {
+    require(TamacharacterId[tokenId].created = !TamacharacterId[tokenId].created, "you've made a character already and named");
+    require(TamacharacterId[tokenId].length < 1, 'tank has reached the max limit of 1 components');
+    require(ownerOf(tokenId) == _msgSender(), "YOU DON't OWN THIS TANK");
 
+    TamacharacterId[tokenId].name = _name;
 
+    TamacharacterId[tokenId].blockadded = block.number;
+    TamacharacterId[tokenId].contractAddress = importContract;
+    TamacharacterId[tokenId].tokenId = importId;
+    TamacharacterId[tokenId].xp = 0;
+    TamacharacterId[tokenId].linkToReturn = ERC721(TamacharacterId[tokenId].contractAddress).tokenURI(TamacharacterId[tokenId].tokenId);
+    TamacharacterId[tokenId].created = true;
+    TamacharacterId[tokenId].hungry = 0;
+    TamacharacterId[tokenId].length += 1;
 
-//functions and getters for creating and feeding a character 
-function createChar(uint256 tokenId, string memory _name, address importContract, uint256 importId) public returns(string memory) {
-  require (TamacharacterId[tokenId].created = !TamacharacterId[tokenId].created, "you've made a character already and named");
-  require(TamacharacterId[tokenId].length < 1, "tank has reached the max limit of 1 components");
-  require(ownerOf(tokenId) == _msgSender(), "YOU DON't OWN THIS TANK");
-  
-  
-  
+    return TamacharacterId[tokenId].name;
+  }
 
-  
-  TamacharacterId[tokenId].name = _name;
+  function claimstatus(uint256 tokenId) public view returns (bool) {
+    return TamacharacterId[tokenId].created;
+  }
 
-  TamacharacterId[tokenId].blockadded = block.number;
-  TamacharacterId[tokenId].contractAddress = importContract;
-  TamacharacterId[tokenId].tokenId = importId;
-  TamacharacterId[tokenId].xp = 0;
-  TamacharacterId[tokenId].linkToReturn = ERC721(TamacharacterId[tokenId].contractAddress).tokenURI(TamacharacterId[tokenId].tokenId);
-  TamacharacterId[tokenId].created = true;
-  TamacharacterId[tokenId].hungry = 0;
-  TamacharacterId[tokenId].length += 1;
+  function getName(uint256 tokenId) public view returns (string memory) {
+    return TamacharacterId[tokenId].name;
+  }
 
+  /**
+   * This has to be done by calling the IERC1155 contract once we have our own Interface for it
+   */
+  function _foodByCollectible(uint256 consumableId) private pure returns (uint8 unitsPerToken) {
+    if (consumableId == 0)
+      // BANANA
+      return 1;
+    if (consumableId == 1)
+      // APPLE
+      return 5;
+    return 0; // NO FOOD
+  }
 
-  return TamacharacterId[tokenId].name;
+  function feed(
+    uint256 tokenId,
+    uint256[] memory consumableId,
+    uint256[] memory consumableQuantities
+  ) public returns (uint256) {
+    require(TamacharacterId[tokenId].length > 0, 'you need a character!');
+    require(TamacharacterId[tokenId].created, "you don't have a character!");
+    require(TamacharacterId[tokenId].hungry < 2, 'your character died :/ please reinitialize');
 
+    uint256 foodToConsume = 1;
+    for (uint256 i = 0; i < consumableId.length; i++) {
+      uint256 consumableStock = consumables.balanceOf(msg.sender, consumableId[i]);
+      require(consumableStock >= consumableQuantities[i], 'TamaController: feed - Wallet does not have enough stock');
 
+      foodToConsume += _foodByCollectible(consumableId[i]) * consumableQuantities[i];
+    }
+    foodToConsume -= 1;
 
-}
-
-function claimstatus(uint256 tokenId) public view returns(bool) {
-  return TamacharacterId[tokenId].created;
-}
-
-function getName(uint256 tokenId) public view returns (string memory) {
- return TamacharacterId[tokenId].name;
-}
-
-function feed(uint256 tokenId) public returns (uint256) {
-  require(TamacharacterId[tokenId].length > 0, "you need a character!");
-  require (TamacharacterId[tokenId].created, "you don't have a character!");  
-  require (TamacharacterId[tokenId].hungry < 2, "your character died :/ please reinitialize");
+    consumables.safeBatchTransferFrom(msg.sender, _consumablesBurnerAddress, consumableId, consumableQuantities, msg.data);
 
     feedingblock = block.number;
+    hungryblock = feedingblock + foodToConsume * 100;
 
     TamacharacterId[tokenId].hungry = 0;
-    TamacharacterId[tokenId].xp += 2;
+    TamacharacterId[tokenId].xp += foodToConsume;
     return TamacharacterId[tokenId].xp;
   }
 
-  function passTime(uint256 tokenId) public returns(uint256) {
-    require(TamacharacterId[tokenId].length > 0, "you need a character!");    
-    require (TamacharacterId[tokenId].hungry < 2, "your character died :/ please reinitialize");
+  function passTime(uint256 tokenId) public returns (uint256) {
+    require(TamacharacterId[tokenId].length > 0, 'you need a character!');
+    require(TamacharacterId[tokenId].hungry < 2, 'your character died :/ please reinitialize');
     TamacharacterId[tokenId].hungry += 1;
 
-    return(TamacharacterId[tokenId].hungry);
+    return (TamacharacterId[tokenId].hungry);
   }
 
-  function getfeednumber() public view returns(uint256) {
+  function getfeednumber() public view returns (uint256) {
     return feedingblock;
   }
 
-    function getBlocknumber() public view returns(uint256) {
+  function getBlocknumber() public view returns (uint256) {
     return block.number;
   }
- 
- function getXP(uint256 tokenId) public view returns (uint256) {
 
-   return TamacharacterId[tokenId].xp;
- }  
+  function getXP(uint256 tokenId) public view returns (uint256) {
+    return TamacharacterId[tokenId].xp;
+  }
 
-function getHunger(uint256 tokenId) public view returns (uint256) {
-
-  return TamacharacterId[tokenId].hungry + (block.number - feedingblock) - 1;
-}
-
+  function getHunger(uint256 tokenId) public view returns (uint256) {
+    if (block.number < hungryblock)
+      // We are not hungry yet
+      return 0;
+    return TamacharacterId[tokenId].hungry + (block.number - hungryblock) - 1;
+  }
 
   function _beforeTokenTransfer(
     address from,
@@ -172,20 +193,13 @@ function getHunger(uint256 tokenId) public view returns (uint256) {
     return super.tokenURI(tokenId);
   }
 
-  function faketokenURI(uint256 tokenId) public view returns(string memory) {
-    
+  function faketokenURI(uint256 tokenId) public view returns (string memory) {
     return TamacharacterId[tokenId].linkToReturn;
   }
 
-  function getAge(uint256 tokenId) public view returns(uint256) {
-    
-    return(block.number - TamacharacterId[tokenId].blockadded );
-
-
+  function getAge(uint256 tokenId) public view returns (uint256) {
+    return (block.number - TamacharacterId[tokenId].blockadded);
   }
-  
-
-
 
   /**
    * @dev Handles the receipt of a single ERC1155 token type. This function is
@@ -208,7 +222,11 @@ function getHunger(uint256 tokenId) public view returns (uint256) {
     uint256 id,
     uint256 value,
     bytes calldata data
-  ) external returns (bytes4) {}
+  ) external returns (bytes4) {
+    // We can update our stock !!
+    // IERC1155 collectiblesContract = new IERC1155(from);
+    return bytes4(keccak256('onERC1155Received(address,address,uint256,uint256,bytes)'));
+  }
 
   /**
    * @dev Handles the receipt of a multiple ERC1155 token types. This function

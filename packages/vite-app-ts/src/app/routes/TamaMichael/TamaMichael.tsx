@@ -1,6 +1,6 @@
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { FC, useEffect, useState } from 'react';
-import { TamaFriend } from '~~/generated/contract-types';
+import { TamaCollectibles, TamaFriend } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { useContractLoader, useContractReader } from 'eth-hooks';
@@ -39,102 +39,65 @@ export const TamaMichael: FC<IYourCollectibleProps> = (props: IYourCollectiblePr
   const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);
   const { mainnetProvider, blockExplorer, tx } = props;
 
-  const YourCollectibleRead = readContracts['TamaFriend'] as TamaFriend;
-  const YourCollectibleWrite = writeContracts['TamaFriend'] as TamaFriend;
+  const YourCollectibleRead = readContracts['TamaCollectibles'] as TamaCollectibles;
+  const YourCollectibleWrite = writeContracts['TamaCollectibles'] as TamaCollectibles;
 
   const balance = useContractReader<BigNumber[]>(YourCollectibleRead, {
-    contractName: 'TamaFriend',
+    contractName: 'TamaCollectibles',
     functionName: 'balanceOf',
-    functionArgs: [ethersContext.account],
+    functionArgs: [ethersContext.account, 0],
   });
   console.log('balance', balance);
   //
   // 🧠 This effect will update yourCollectibles by polling when your balance changes
   //
   const [yourCollectibles, setYourCollectibles] = useState<any>([]);
-  const [minting, setMinting] = useState<boolean>(false);
-  const [transferToAddresses, setTransferToAddresses] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     const updateYourCollectibles = async () => {
-      const collectibleUpdate = [];
-      if (!balance) return;
-      const yourBalance = balance[0]?.toNumber() ?? 0;
-      for (let tokenIndex = 0; tokenIndex < yourBalance; tokenIndex++) {
+      if (ethersContext.account == undefined) return;
+
+      const collectibleUpdate: any = [];
+      [0, 1].forEach(async tokenId => {
         try {
-          console.log('Getting token index', tokenIndex);
-          const tokenId = await YourCollectibleRead.tokenOfOwnerByIndex(ethersContext.account ?? '', tokenIndex);
-          console.log('tokenId', tokenId);
-          const tokenURI = await YourCollectibleRead.tokenURI(tokenId);
+          console.log('Getting token index', tokenId);
+          const tokenURI = await YourCollectibleRead.uri(tokenId);
           console.log('tokenURI', tokenURI);
+          const tokenBalance = await YourCollectibleRead.balanceOf(ethersContext.account || '', tokenId);
 
-          const ipfsHash = tokenURI.replace('https://ipfs.io/ipfs/', '');
-          console.log('ipfsHash', ipfsHash);
-
-          const content = await getFromIPFS(ipfsHash);
+          const content = await getFromIPFS(tokenURI + '/0');
 
           try {
             const ipfsObject = JSON.parse(content);
             console.log('ipfsObject', ipfsObject);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: ethersContext.account, ...ipfsObject });
+            collectibleUpdate.push({
+              id: tokenId,
+              uri: tokenURI,
+              owner: ethersContext.account,
+              tokenBalance: BigNumber.from(tokenBalance),
+              ...ipfsObject
+            });
           } catch (e) {
             console.log(e);
           }
         } catch (e) {
           console.log(e);
         }
-      }
+      });
+
       setYourCollectibles(collectibleUpdate);
     };
     updateYourCollectibles();
   }, [ethersContext.account, balance]);
 
-  const [mintCount, setMintCount] = useState<number>(0);
-  const mintItem = async () => {
-    if (!tx || !ethersContext.account) return;
-
-    // upload to ipfs
-    const uploaded = await ipfs.add(JSON.stringify(mintJson[mintCount]));
-    setMintCount(mintCount + 1);
-    console.log('Uploaded Hash: ', uploaded);
-    await tx(YourCollectibleWrite.mintItem(uploaded.path), (update) => {
-      console.log('📡 Transaction Update:', update);
-      if (update && (update.status === 'confirmed' || update.status === 1)) {
-        console.log(' 🍾 Transaction ' + update.hash + ' finished!');
-        console.log(
-          ' ⛽️ ' +
-          update.gasUsed +
-          '/' +
-          (update.gasLimit || update.gas) +
-          ' @ ' +
-          parseFloat(update.gasPrice) / 1000000000 +
-          ' gwei'
-        );
-      }
-    });
-  };
-
   return (
     <>
-      <div style={{ width: 640, margin: 'auto', marginTop: 32, paddingBottom: 32 }}>
-        <Button
-          disabled={minting || mintCount >= mintJson.length - 1}
-          shape="round"
-          size="large"
-          onClick={async () => {
-            setMinting(true);
-            await mintItem();
-            setMinting(false);
-          }}>
-          MINT NFT
-        </Button>
-      </div>
       <div style={{ width: 640, margin: 'auto', marginTop: 32, paddingBottom: 32 }}>
         <List
           bordered
           dataSource={yourCollectibles}
           renderItem={(item: any) => {
-            const id = item.id.toNumber();
+            const id = 0;
             return (
               <List.Item key={id + '_' + item.uri + '_' + item.owner}>
                 <Card
@@ -150,28 +113,8 @@ export const TamaMichael: FC<IYourCollectibleProps> = (props: IYourCollectiblePr
                 </Card>
 
                 <div>
-                  owner:{' '}
-                  <Address
-                    address={item.owner}
-                    ensProvider={mainnetProvider}
-                    blockExplorer={blockExplorer}
-                    fontSize={16}
-                  />
-                  <AddressInput
-                    ensProvider={mainnetProvider}
-                    placeholder="transfer to address"
-                    address={transferToAddresses[id]}
-                    onChange={(newValue) => {
-                      setTransferToAddresses({ ...transferToAddresses, ...{ [id]: newValue } });
-                    }}
-                  />
-                  <Button
-                    onClick={() => {
-                      if (!ethersContext.account || !tx) return;
-                      tx(YourCollectibleWrite.transferFrom(ethersContext.account, transferToAddresses[id], id));
-                    }}>
-                    Transfer
-                  </Button>
+                  <div>Owned: {balance}</div>
+                  <Button>BUY MORE (not working)</Button>
                 </div>
               </List.Item>
             );

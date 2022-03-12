@@ -71,7 +71,7 @@ export const YourCollectibles: FC<IYourCollectibleProps> = (props: IYourCollecti
           const ipfsHash = tokenURI.replace('https://ipfs.io/ipfs/', '');
           console.log('ipfsHash', ipfsHash);
 
-          const content = await getFromIPFS(ipfsHash);
+          const content = await getFromIPFS(ipfsHash + ".json");
 
           try {
             const ipfsObject = JSON.parse(content);

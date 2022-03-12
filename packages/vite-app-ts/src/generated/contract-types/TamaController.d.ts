@@ -21,19 +21,21 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface TamaControllerInterface extends ethers.utils.Interface {
   functions: {
-    "TamacharacterId(address)": FunctionFragment;
+    "TamacharacterId(uint256)": FunctionFragment;
+    "_consumablesBurnerAddress()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "claimstatus(address)": FunctionFragment;
-    "createChar(address,string,address,uint256)": FunctionFragment;
-    "faketokenURI(address)": FunctionFragment;
-    "feed(address)": FunctionFragment;
-    "getAge(address)": FunctionFragment;
+    "claimstatus(uint256)": FunctionFragment;
+    "consoletoData(uint256)": FunctionFragment;
+    "createChar(uint256,string,address,uint256)": FunctionFragment;
+    "faketokenURI(uint256)": FunctionFragment;
+    "feed(uint256,uint256[],uint256[])": FunctionFragment;
+    "getAge(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getBlocknumber()": FunctionFragment;
-    "getHunger(address)": FunctionFragment;
-    "getName(address)": FunctionFragment;
-    "getXP(address)": FunctionFragment;
+    "getHunger(uint256)": FunctionFragment;
+    "getName(uint256)": FunctionFragment;
+    "getXP(uint256)": FunctionFragment;
     "getfeednumber()": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mintItem(string)": FunctionFragment;
@@ -42,16 +44,15 @@ interface TamaControllerInterface extends ethers.utils.Interface {
     "onERC1155Received(address,address,uint256,uint256,bytes)": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "passTime(address)": FunctionFragment;
+    "passTime(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
-    "tamafriendOf(address)": FunctionFragment;
+    "tamafriendOf(uint256)": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
     "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
-    "tokenToData(uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
@@ -60,24 +61,41 @@ interface TamaControllerInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "TamacharacterId",
-    values: [string]
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "_consumablesBurnerAddress",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(functionFragment: "claimstatus", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "claimstatus",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "consoletoData",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "createChar",
-    values: [string, string, string, BigNumberish]
+    values: [BigNumberish, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "faketokenURI",
-    values: [string]
+    values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "feed", values: [string]): string;
-  encodeFunctionData(functionFragment: "getAge", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "feed",
+    values: [BigNumberish, BigNumberish[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAge",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
@@ -86,9 +104,15 @@ interface TamaControllerInterface extends ethers.utils.Interface {
     functionFragment: "getBlocknumber",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "getHunger", values: [string]): string;
-  encodeFunctionData(functionFragment: "getName", values: [string]): string;
-  encodeFunctionData(functionFragment: "getXP", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "getHunger",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getName",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "getXP", values: [BigNumberish]): string;
   encodeFunctionData(
     functionFragment: "getfeednumber",
     values?: undefined
@@ -112,7 +136,10 @@ interface TamaControllerInterface extends ethers.utils.Interface {
     functionFragment: "ownerOf",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "passTime", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "passTime",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -132,7 +159,7 @@ interface TamaControllerInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "tamafriendOf",
-    values: [string]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "tokenByIndex",
@@ -141,10 +168,6 @@ interface TamaControllerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "tokenOfOwnerByIndex",
     values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "tokenToData",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "tokenURI",
@@ -167,10 +190,18 @@ interface TamaControllerInterface extends ethers.utils.Interface {
     functionFragment: "TamacharacterId",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "_consumablesBurnerAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "claimstatus",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "consoletoData",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "createChar", data: BytesLike): Result;
@@ -239,10 +270,6 @@ interface TamaControllerInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "tokenOfOwnerByIndex",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenToData",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
@@ -341,7 +368,7 @@ export class TamaController extends BaseContract {
 
   functions: {
     TamacharacterId(
-      arg0: string,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
@@ -354,7 +381,8 @@ export class TamaController extends BaseContract {
         BigNumber,
         string,
         boolean,
-        boolean
+        boolean,
+        number
       ] & {
         name: string;
         blockadded: BigNumber;
@@ -366,8 +394,11 @@ export class TamaController extends BaseContract {
         linkToReturn: string;
         created: boolean;
         isAlive: boolean;
+        length: number;
       }
     >;
+
+    _consumablesBurnerAddress(overrides?: CallOverrides): Promise<[string]>;
 
     approve(
       to: string,
@@ -377,24 +408,42 @@ export class TamaController extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    claimstatus(tokenId: string, overrides?: CallOverrides): Promise<[boolean]>;
+    claimstatus(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    consoletoData(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, string] & { tokenId: BigNumber; contractAddress: string }
+    >;
 
     createChar(
-      tokenId: string,
+      tokenId: BigNumberish,
       _name: string,
       importContract: string,
       importId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    faketokenURI(tokenId: string, overrides?: CallOverrides): Promise<[string]>;
+    faketokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     feed(
-      tokenId: string,
+      tokenId: BigNumberish,
+      consumableId: BigNumberish[],
+      consumableQuantities: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    getAge(tokenId: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getAge(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -403,11 +452,20 @@ export class TamaController extends BaseContract {
 
     getBlocknumber(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getHunger(tokenId: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getHunger(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
-    getName(tokenId: string, overrides?: CallOverrides): Promise<[string]>;
+    getName(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
-    getXP(tokenId: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    getXP(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     getfeednumber(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -450,7 +508,7 @@ export class TamaController extends BaseContract {
     ): Promise<[string]>;
 
     passTime(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -487,7 +545,7 @@ export class TamaController extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
     tamafriendOf(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
@@ -501,7 +559,8 @@ export class TamaController extends BaseContract {
           BigNumber,
           string,
           boolean,
-          boolean
+          boolean,
+          number
         ] & {
           name: string;
           blockadded: BigNumber;
@@ -513,6 +572,7 @@ export class TamaController extends BaseContract {
           linkToReturn: string;
           created: boolean;
           isAlive: boolean;
+          length: number;
         }
       ]
     >;
@@ -527,13 +587,6 @@ export class TamaController extends BaseContract {
       index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
-
-    tokenToData(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, string] & { tokenId: BigNumber; contractAddress: string }
-    >;
 
     tokenURI(
       tokenId: BigNumberish,
@@ -556,7 +609,7 @@ export class TamaController extends BaseContract {
   };
 
   TamacharacterId(
-    arg0: string,
+    arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     [
@@ -569,7 +622,8 @@ export class TamaController extends BaseContract {
       BigNumber,
       string,
       boolean,
-      boolean
+      boolean,
+      number
     ] & {
       name: string;
       blockadded: BigNumber;
@@ -581,8 +635,11 @@ export class TamaController extends BaseContract {
       linkToReturn: string;
       created: boolean;
       isAlive: boolean;
+      length: number;
     }
   >;
+
+  _consumablesBurnerAddress(overrides?: CallOverrides): Promise<string>;
 
   approve(
     to: string,
@@ -592,24 +649,39 @@ export class TamaController extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  claimstatus(tokenId: string, overrides?: CallOverrides): Promise<boolean>;
+  claimstatus(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  consoletoData(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, string] & { tokenId: BigNumber; contractAddress: string }
+  >;
 
   createChar(
-    tokenId: string,
+    tokenId: BigNumberish,
     _name: string,
     importContract: string,
     importId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  faketokenURI(tokenId: string, overrides?: CallOverrides): Promise<string>;
+  faketokenURI(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   feed(
-    tokenId: string,
+    tokenId: BigNumberish,
+    consumableId: BigNumberish[],
+    consumableQuantities: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  getAge(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+  getAge(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   getApproved(
     tokenId: BigNumberish,
@@ -618,11 +690,14 @@ export class TamaController extends BaseContract {
 
   getBlocknumber(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getHunger(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+  getHunger(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
-  getName(tokenId: string, overrides?: CallOverrides): Promise<string>;
+  getName(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  getXP(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+  getXP(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   getfeednumber(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -662,7 +737,7 @@ export class TamaController extends BaseContract {
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   passTime(
-    tokenId: string,
+    tokenId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -699,7 +774,7 @@ export class TamaController extends BaseContract {
   symbol(overrides?: CallOverrides): Promise<string>;
 
   tamafriendOf(
-    tokenId: string,
+    tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     [
@@ -712,7 +787,8 @@ export class TamaController extends BaseContract {
       BigNumber,
       string,
       boolean,
-      boolean
+      boolean,
+      number
     ] & {
       name: string;
       blockadded: BigNumber;
@@ -724,6 +800,7 @@ export class TamaController extends BaseContract {
       linkToReturn: string;
       created: boolean;
       isAlive: boolean;
+      length: number;
     }
   >;
 
@@ -737,13 +814,6 @@ export class TamaController extends BaseContract {
     index: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
-
-  tokenToData(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, string] & { tokenId: BigNumber; contractAddress: string }
-  >;
 
   tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -763,7 +833,7 @@ export class TamaController extends BaseContract {
 
   callStatic: {
     TamacharacterId(
-      arg0: string,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
@@ -776,7 +846,8 @@ export class TamaController extends BaseContract {
         BigNumber,
         string,
         boolean,
-        boolean
+        boolean,
+        number
       ] & {
         name: string;
         blockadded: BigNumber;
@@ -788,8 +859,11 @@ export class TamaController extends BaseContract {
         linkToReturn: string;
         created: boolean;
         isAlive: boolean;
+        length: number;
       }
     >;
+
+    _consumablesBurnerAddress(overrides?: CallOverrides): Promise<string>;
 
     approve(
       to: string,
@@ -799,21 +873,42 @@ export class TamaController extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    claimstatus(tokenId: string, overrides?: CallOverrides): Promise<boolean>;
+    claimstatus(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    consoletoData(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, string] & { tokenId: BigNumber; contractAddress: string }
+    >;
 
     createChar(
-      tokenId: string,
+      tokenId: BigNumberish,
       _name: string,
       importContract: string,
       importId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    faketokenURI(tokenId: string, overrides?: CallOverrides): Promise<string>;
+    faketokenURI(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
-    feed(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    feed(
+      tokenId: BigNumberish,
+      consumableId: BigNumberish[],
+      consumableQuantities: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getAge(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getAge(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -822,11 +917,14 @@ export class TamaController extends BaseContract {
 
     getBlocknumber(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getHunger(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getHunger(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getName(tokenId: string, overrides?: CallOverrides): Promise<string>;
+    getName(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    getXP(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getXP(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     getfeednumber(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -865,7 +963,10 @@ export class TamaController extends BaseContract {
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    passTime(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    passTime(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -898,7 +999,7 @@ export class TamaController extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<string>;
 
     tamafriendOf(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
@@ -911,7 +1012,8 @@ export class TamaController extends BaseContract {
         BigNumber,
         string,
         boolean,
-        boolean
+        boolean,
+        number
       ] & {
         name: string;
         blockadded: BigNumber;
@@ -923,6 +1025,7 @@ export class TamaController extends BaseContract {
         linkToReturn: string;
         created: boolean;
         isAlive: boolean;
+        length: number;
       }
     >;
 
@@ -936,13 +1039,6 @@ export class TamaController extends BaseContract {
       index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    tokenToData(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, string] & { tokenId: BigNumber; contractAddress: string }
-    >;
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -1035,9 +1131,11 @@ export class TamaController extends BaseContract {
 
   estimateGas: {
     TamacharacterId(
-      arg0: string,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    _consumablesBurnerAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     approve(
       to: string,
@@ -1047,10 +1145,18 @@ export class TamaController extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    claimstatus(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    claimstatus(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    consoletoData(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     createChar(
-      tokenId: string,
+      tokenId: BigNumberish,
       _name: string,
       importContract: string,
       importId: BigNumberish,
@@ -1058,16 +1164,21 @@ export class TamaController extends BaseContract {
     ): Promise<BigNumber>;
 
     faketokenURI(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     feed(
-      tokenId: string,
+      tokenId: BigNumberish,
+      consumableId: BigNumberish[],
+      consumableQuantities: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    getAge(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getAge(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -1076,11 +1187,17 @@ export class TamaController extends BaseContract {
 
     getBlocknumber(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getHunger(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getHunger(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getName(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getName(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
-    getXP(tokenId: string, overrides?: CallOverrides): Promise<BigNumber>;
+    getXP(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     getfeednumber(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1123,7 +1240,7 @@ export class TamaController extends BaseContract {
     ): Promise<BigNumber>;
 
     passTime(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1160,7 +1277,7 @@ export class TamaController extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
     tamafriendOf(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1172,11 +1289,6 @@ export class TamaController extends BaseContract {
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    tokenToData(
-      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1202,7 +1314,11 @@ export class TamaController extends BaseContract {
 
   populateTransaction: {
     TamacharacterId(
-      arg0: string,
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    _consumablesBurnerAddress(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1218,12 +1334,17 @@ export class TamaController extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     claimstatus(
-      tokenId: string,
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    consoletoData(
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     createChar(
-      tokenId: string,
+      tokenId: BigNumberish,
       _name: string,
       importContract: string,
       importId: BigNumberish,
@@ -1231,17 +1352,19 @@ export class TamaController extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     faketokenURI(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     feed(
-      tokenId: string,
+      tokenId: BigNumberish,
+      consumableId: BigNumberish[],
+      consumableQuantities: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     getAge(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1253,17 +1376,17 @@ export class TamaController extends BaseContract {
     getBlocknumber(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getHunger(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getName(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getXP(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1308,7 +1431,7 @@ export class TamaController extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     passTime(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1345,7 +1468,7 @@ export class TamaController extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     tamafriendOf(
-      tokenId: string,
+      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1357,11 +1480,6 @@ export class TamaController extends BaseContract {
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    tokenToData(
-      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
