@@ -7,8 +7,7 @@ import sampleTravel from './travel.jpeg';
 import happyEmoji from '../assets/emojis/happy.png';
 import sadEmoji from '../assets/emojis/sad.png';
 import normalEmoji from '../assets/emojis/normal.png';
-import { calcLoc } from '../utils';
-
+import { calcLoc, MOVE_UPDATE_INTERVAL, MOVE_DURATION} from '../utils';
 const move = ['none', 'move1', 'move2'];
 
 export interface ITamaConsole {
@@ -16,15 +15,25 @@ export interface ITamaConsole {
 }
 export const TamaConsole: FC<ITamaConsole> = (props) => {
   const consoleConfig = props.consoleConfig;
-  const [currMove, setCurrMove] = useState(0);
+  const [currMove, setCurrMove] = useState(undefined || Object);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const n = Math.floor(Math.random() * 3);
-      setCurrMove(n);
-    }, 5000);
+      const path = Math.floor(Math.random() * 3);
+      const time = Math.floor(Math.random() * 10 + 5);
+      const rotate_speed = Math.floor(Math.random() * 5 + 2);
+    
+      const newOptions = {
+          path : move[path],
+          time : `${time}s`,
+          rotate_speed : `0.${rotate_speed}s`,
+      }
+      console.log('current moment', newOptions);
+      setCurrMove(newOptions);
+    }, MOVE_UPDATE_INTERVAL);
     return () => clearInterval(interval);
   }, []);
+
 
   //   setInterval(()=>{generateRandom()},15000);
   console.log('PRINTING IN CONSOLE COMPONENT', consoleConfig);
@@ -54,9 +63,11 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
           style={{
             width: '30%',
             height: '30%',
-            animation: `${move[currMove]} 3s forwards`,
+            animation: `${currMove.path} ${currMove.time}`,
           }}>
-          <img className="tamaFriend" src={friend2}></img>
+          <img className="tamaFriend" src={friend2} style={{ 
+  animation: `rotate ${currMove.rotate_speed} infinite`
+          }}></img>
           <img className = "textCloud" src = {expHolder}></img>
           <img className = "emoji" src = {normalEmoji}></img>
           {/* <div className='emoji expText'>ZZZ</div> */}

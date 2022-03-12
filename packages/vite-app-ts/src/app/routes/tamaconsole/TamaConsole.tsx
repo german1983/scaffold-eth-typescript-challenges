@@ -18,8 +18,8 @@ import { targetNetworkInfo } from '~~/config/providersConfig';
 import ReactDOMServer from 'react-dom/server';
 
 // We should move this into a Service but given this is the only place we are using it for now, I'm simplifying
-// const apiServerUrl = "https://tama-test-api.herokuapp.com/api/consoles";
-const apiServerUrl = "http://localhost:5000/api/consoles";
+const apiServerUrl = "https://tama-test-api.herokuapp.com/api/consoles";
+// const apiServerUrl = "http://localhost:5000/api/consoles";
 
 const basicColorSetup = {
   backColor: '3ca9de',

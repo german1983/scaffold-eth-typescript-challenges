@@ -1,3 +1,6 @@
+export const MOVE_UPDATE_INTERVAL = 20000;
+export const MOVE_DURATION = '15s';
+
 export const consoleConfigs: { [key: number]: Object } = {
   1: {
     consolex: 112.19,
