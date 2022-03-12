@@ -36,22 +36,24 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     string linkToReturn;
     bool created;
     bool isAlive;
+    uint8 length;
+   
    
 
    
   }
 
-  struct tokenData {
+  struct consoleData {
     uint256 tokenId;
     address contractAddress;
   }
 
  
-  mapping(address => AssignedTamaFriend) public TamacharacterId;
-  mapping(uint256 => tokenData) public tokenToData;
+  mapping(uint256 => AssignedTamaFriend) public TamacharacterId;
+  mapping(uint256 => consoleData) public consoletoData;
 
 
-    function tamafriendOf(address tokenId) public view returns (AssignedTamaFriend memory) {
+    function tamafriendOf(uint256 tokenId) public view returns (AssignedTamaFriend memory) {
       AssignedTamaFriend memory TamacharacterIdInController = TamacharacterId[tokenId];
       // require(AssignedTamaFriend != address(0), "ERC721: owner query for nonexistent token");
       return TamacharacterIdInController;
@@ -66,8 +68,12 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
 
 
 //functions and getters for creating and feeding a character 
-function createChar(address tokenId, string memory _name, address importContract, uint256 importId) public returns(string memory) {
+function createChar(uint256 tokenId, string memory _name, address importContract, uint256 importId) public returns(string memory) {
   require (TamacharacterId[tokenId].created = !TamacharacterId[tokenId].created, "you've made a character already and named");
+  require(TamacharacterId[tokenId].length < 1, "tank has reached the max limit of 1 components");
+  require(ownerOf(tokenId) == _msgSender(), "YOU DON't OWN THIS TANK");
+  
+  
   
 
   
@@ -80,6 +86,7 @@ function createChar(address tokenId, string memory _name, address importContract
   TamacharacterId[tokenId].linkToReturn = ERC721(TamacharacterId[tokenId].contractAddress).tokenURI(TamacharacterId[tokenId].tokenId);
   TamacharacterId[tokenId].created = true;
   TamacharacterId[tokenId].hungry = 0;
+  TamacharacterId[tokenId].length += 1;
 
 
   return TamacharacterId[tokenId].name;
@@ -88,16 +95,16 @@ function createChar(address tokenId, string memory _name, address importContract
 
 }
 
-function claimstatus(address tokenId) public view returns(bool) {
+function claimstatus(uint256 tokenId) public view returns(bool) {
   return TamacharacterId[tokenId].created;
 }
 
-function getName(address tokenId) public view returns (string memory) {
+function getName(uint256 tokenId) public view returns (string memory) {
  return TamacharacterId[tokenId].name;
 }
 
-function feed(address tokenId) public returns (uint256) {
-
+function feed(uint256 tokenId) public returns (uint256) {
+  require(TamacharacterId[tokenId].length > 0, "you need a character!");
   require (TamacharacterId[tokenId].created, "you don't have a character!");  
   require (TamacharacterId[tokenId].hungry < 2, "your character died :/ please reinitialize");
 
@@ -108,7 +115,8 @@ function feed(address tokenId) public returns (uint256) {
     return TamacharacterId[tokenId].xp;
   }
 
-  function passTime(address tokenId) public returns(uint256) {
+  function passTime(uint256 tokenId) public returns(uint256) {
+    require(TamacharacterId[tokenId].length > 0, "you need a character!");    
     require (TamacharacterId[tokenId].hungry < 2, "your character died :/ please reinitialize");
     TamacharacterId[tokenId].hungry += 1;
 
@@ -123,12 +131,12 @@ function feed(address tokenId) public returns (uint256) {
     return block.number;
   }
  
- function getXP(address tokenId) public view returns (uint256) {
+ function getXP(uint256 tokenId) public view returns (uint256) {
 
    return TamacharacterId[tokenId].xp;
  }  
 
-function getHunger(address tokenId) public view returns (uint256) {
+function getHunger(uint256 tokenId) public view returns (uint256) {
 
   return TamacharacterId[tokenId].hungry + (block.number - feedingblock) - 1;
 }
@@ -164,12 +172,12 @@ function getHunger(address tokenId) public view returns (uint256) {
     return super.tokenURI(tokenId);
   }
 
-  function faketokenURI(address tokenId) public view returns(string memory) {
+  function faketokenURI(uint256 tokenId) public view returns(string memory) {
     
     return TamacharacterId[tokenId].linkToReturn;
   }
 
-  function getAge(address tokenId) public view returns(uint256) {
+  function getAge(uint256 tokenId) public view returns(uint256) {
     
     return(block.number - TamacharacterId[tokenId].blockadded );
 
