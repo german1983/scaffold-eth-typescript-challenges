@@ -6,7 +6,7 @@ import { GameMenu, IShapeObject, shapes } from './components/Menu';
 import { transactor, TTransactor } from 'eth-components/functions';
 import { StaticJsonRpcProvider } from '@ethersproject/providers';
 import { useEthersContext } from 'eth-hooks/context';
-import { useContractLoader, useContractReader, useGasPrice } from 'eth-hooks';
+import { useBalance, useContractLoader, useContractReader, useGasPrice } from 'eth-hooks';
 import { create } from 'ipfs-http-client';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
@@ -15,6 +15,9 @@ import { TamaController } from '~~/generated/contract-types';
 import { targetNetworkInfo } from '~~/config/providersConfig';
 import { TamaConsole } from './components/TamaConsole';
 import { consoleConfigs } from './utils';
+import { sampleWallet } from './utils';
+
+import {TRAVEL, FOOD} from './utils'
 
 const basicColorSetup = {
   backColor: '3ca9de',
@@ -56,8 +59,13 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
   const [consoleList, setConsoleList] = useState<any>([]);
   const TamaControllerRead = readContracts['TamaController'] as TamaController;
   const TamaControllerWrite = writeContracts['TamaController'] as TamaController;
-
+  const [wallet, updateWallet] = useState(sampleWallet);
   const [currentConsole, setCurrentConsole] = useState<any>(undefined);
+  const [listenItemUsed, setItemUsed] = useState(undefined);
+  const [consoleBackground, setConsoleBackground] = useState(undefined);
+
+
+  const [walletChooseType , onWalletChooseType] = useState('none');
 
   const toMint = useRef<any>();
   toMint.current = currentConsole;
@@ -93,6 +101,27 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
     else connect(false);
   }, [ethersContext.account]);
 
+  const useItemFromWallet = (item) => {
+      //PERFORM TRANSACTION TO USE ITEM IN CONTRACT
+      //if transaction sucessful, update state in UI, state will be updated automatically from contract or using UI ( tbd )
+      //if all good, a pop up image will appear in the UI of the item being consumed ( if its food ), or the new background will appear, if its travel;
+
+      //udpate wallet, wallet should update by itself from blockchain
+      let otherItems = wallet.filter(ind => !(ind.value == item.value &&ind.name == item.name && ind.type == item.type && ind.id == item.id));
+      updateWallet(otherItems);
+      if(item.type == FOOD){
+        setItemUsed(item);
+      }
+      if(item.type == TRAVEL){
+          setConsoleBackground(item.uri);
+      }
+
+  }
+
+  useEffect(()=>{
+    console.log('setting new console background', consoleBackground);
+  },[consoleBackground])
+
   useEffect(() => {
     const updateTamaControllers = async () => {
       const collectibleUpdate = [];
@@ -105,16 +134,18 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
           console.log('tokenId', tokenId);
           const tokenURI = await TamaControllerRead.tokenURI(tokenId);
           console.log('tokenURI', tokenURI);
-
+          const tamaCharacter = await TamaControllerRead.faketokenURI(ethersContext.account);
           const ipfsHash = tokenURI.replace('ipfs://', '');
+          const characterHash = tamaCharacter.replace('https://ipfs.io/ipfs/', '');
           console.log('ipfsHash', ipfsHash);
-
           const content = await getFromIPFS(ipfsHash);
+          const characterContent = await getFromIPFS(characterHash);
 
           try {
             const ipfsObject = JSON.parse(content);
+            const characterObject = JSON.parse(characterContent)
             console.log('ipfsObject', ipfsObject);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: ethersContext.account, ...ipfsObject });
+            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: ethersContext.account, character : characterObject ,...ipfsObject });
           } catch (e) {
             console.log(e);
           }
@@ -124,17 +155,17 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
       }
       //temporary map
       let temp = collectibleUpdate.map((item) => {
-        let attributes = item.attributes;
         return {
           ...item,
-          attributes: consoleConfigs[item.id.toNumber()]
+          attributes: consoleConfigs[item.name]
         }
       })
-      //   console.log("UPDATING CONSOLE LIST",temp);
+        console.log("UPDATING CONSOLE LIST",temp);
       setConsoleList(temp);
     };
     updateTamaControllers();
   }, [ethersContext.account, balance]);
+
   const renderShape = (value: any) => {
     return <img>{currentConsole}</img>
   };
@@ -145,8 +176,11 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
         <img className="console--img" src={consoleList[currentConsole].image}></img>
         <TamaConsole
           consoleConfig={consoleList[currentConsole].attributes}
+          tamaCharacter = {consoleList[currentConsole].character}
+          onWalletChooseType = {onWalletChooseType}
+          listenItemUsed = {listenItemUsed }
+          consoleBackground = {consoleBackground}
         ></TamaConsole></div>}
-
       <div className="menuWrapper">
         <div className="menuTitle">PLAYGROUND</div>
         <GameMenu
@@ -162,7 +196,10 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
           setLineColor={setLineColor}
           shapeList={consoleList}
           setCurrentConsole={setCurrentConsole}
-          currentConsole={currentConsole}></GameMenu>
+          currentConsole={currentConsole}
+          wallet={wallet}
+          walletChooseType={walletChooseType}
+          useItemFromWallet={useItemFromWallet}></GameMenu>
         <div
           className="mintButton"
           onClick={async () => {

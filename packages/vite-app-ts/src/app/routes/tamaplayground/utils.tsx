@@ -1,8 +1,10 @@
 export const MOVE_UPDATE_INTERVAL = 20000;
 export const MOVE_DURATION = '15s';
+export const FOOD = 'food';
+export const TRAVEL = 'travel';
 
-export const consoleConfigs: { [key: number]: Object } = {
-  1: {
+export const consoleConfigs: { [key: string]: Object } = {
+  "Tama Console Oval" : {
     consolex: 112.19,
     consoley: 136.48,
     screenx: 18,
@@ -19,7 +21,7 @@ export const consoleConfigs: { [key: number]: Object } = {
     button3y: 102.62,
     button3w: 14,
   },
-  2: {
+  "Tama Console Whatever": {
     consolex: 112.19,
     consoley: 136.48,
     screenx: 18,
@@ -99,3 +101,51 @@ export function calcLoc(config: any) {
     new_button3w,
   ];
 }
+
+export const sampleWallet = [
+  {
+    name : 'banana',
+    type : 'food',
+    value : '3',
+    id : '1',
+    uri : 'https://e7.pngegg.com/pngimages/796/636/png-clipart-banana-banana.png' // we can store this somewhere not in contract
+  },
+  {
+    name : 'banana',
+    type : 'food',
+    value : '3',
+    id : '2',
+    uri : 'https://e7.pngegg.com/pngimages/796/636/png-clipart-banana-banana.png'
+  },
+  {
+    name : 'apple',
+    type : 'food',
+    value : '2',
+    id : '3',
+    uri : 'https://image.similarpng.com/very-thumbnail/2020/07/Red-Apple-vector-PNG.png'
+  },
+  {
+    name : 'banana',
+    type : 'food',
+    value : '3',
+    id: '4',
+    uri : 'https://e7.pngegg.com/pngimages/796/636/png-clipart-banana-banana.png'
+  },
+  {
+    name : 'pinaple',
+    type : 'food',
+    value : '1',
+    id : '5',
+    uri : 'https://toppng.com/uploads/preview/pineapple-png-vector-11546986733j32wkgzdml.png'
+  },
+
+  {
+    name : 'New York',
+    type : 'travel',
+    value : '100',
+    id : '6',
+    uri : 'https://www.pngmart.com/files/16/New-York-Cityscape-Transparent-PNG.png'
+  }
+  
+
+]

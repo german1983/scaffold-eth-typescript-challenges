@@ -1,7 +1,16 @@
 .consoleButton {
   position: absolute;
-  background-color: red;
+  background-color: transparent;
   border-radius: 50%;
+  border-width: 2px;
+
+  &:active {
+    transform: scale(0.2);
+    opacity: 0.6;
+  }
+  &:hover {
+    border-color: yellow;
+  }
 }
 .ConsoleMain {
   position: absolute;
@@ -25,13 +34,12 @@
 .layer3 {
   position: absolute;
   //   width: 200%;
-  transform: translate(125%, 250%);
+  transform: translate(125%, 230%);
 }
 .tamaFriend {
   position: absolute;
   width: 100%;
   height: 100%;
-  animation: rotate 0.5s infinite;
 }
 .textCloud {
   position: absolute;
@@ -56,6 +64,14 @@
   font-weight: 900;
   overflow: hidden;
   transform: translate(250%, -140%);
+}
+.popupImage {
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  opacity: 0;
+  animation: fade linear 2s;
+  z-index: 100000000000;
 }
 @keyframes pulse {
   from {
@@ -84,23 +100,45 @@
 }
 @keyframes move1 {
   from {
-    transform: translate(125%, 250%);
+    transform: translate(125%, 230%);
   }
   50% {
-    transform: translate(250%, 250%);
+    transform: translate(230%, 230%);
   }
   to {
-    transform: translate(125%, 250%);
+    transform: translate(125%, 230%);
   }
 }
 @keyframes move2 {
   from {
-    transform: translate(125%, 250%);
+    transform: translate(125%, 230%);
   }
   50% {
     transform: translate(125%, 125%);
   }
   to {
-    transform: translate(125%, 250%);
+    transform: translate(125%, 230%);
+  }
+}
+@keyframes fade {
+  from {
+    transform: translate(75%, -60%);
+    opacity: 1;
+  }
+  25% {
+    transform: translate(75%, -75%);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(75%, -90%);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translate(75%, -105%);
+    opacity: 0.5;
+  }
+  to {
+    transform: translate(75%, -120%);
+    opacity: 0;
   }
 }

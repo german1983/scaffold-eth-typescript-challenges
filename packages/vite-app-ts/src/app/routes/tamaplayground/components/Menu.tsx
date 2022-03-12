@@ -38,6 +38,9 @@ interface IMenu {
   shapeList: Array<IShapeObject>;
   setCurrentConsole: any;
   currentConsole: any;
+  wallet : Array<object>;
+  walletChooseType : string;
+  useItemFromWallet : Function
 }
 export const GameMenu: FC<IMenu> = (props) => {
   const [newPurpose, setNewPurpose] = useState('loading...');
@@ -80,6 +83,9 @@ export const GameMenu: FC<IMenu> = (props) => {
     shapeList,
     setCurrentConsole,
     currentConsole,
+    wallet,
+    walletChooseType,
+    useItemFromWallet
   } = props;
 
   useEffect(() => {
@@ -112,6 +118,16 @@ export const GameMenu: FC<IMenu> = (props) => {
     setCurrentConsole(index);
   };
 
+  const onClickItem = (item = Object) =>{
+
+    console.log('clicked',item)
+    console.log(walletChooseType)
+    if(item.type == walletChooseType){
+
+      console.log('performing consume', item);
+      useItemFromWallet(item);
+    }
+  }
   return (
     <div className="main">
       <div className="submenu">Available Shapes</div>
@@ -126,53 +142,12 @@ export const GameMenu: FC<IMenu> = (props) => {
       </div>
       <div className="submenu">Wallet</div>
       <ul className="ul2">
-        <li>
-          <label>Back Shape</label>
-          <input
-            type="color"
-            value={'#' + backColor}
-            onChange={(e) => {
-              onHandleBackChange(e);
-            }}></input>
-        </li>
-        <li>
-          <label>Middle Shape</label>
-          <input
-            type="color"
-            value={'#' + middleColor}
-            onChange={(e) => {
-              onHandleMiddleChange(e);
-            }}></input>
-        </li>
-
-        <li>
-          <label>Screen</label>
-          <input
-            type="color"
-            value={'#' + frontColor}
-            onChange={(e) => {
-              onHandleFrontChange(e);
-            }}></input>
-        </li>
-        <li>
-          <label>Buttons</label>
-          <input
-            type="color"
-            value={'#' + buttonColor}
-            onChange={(e) => {
-              onHandleButtonChange(e);
-            }}></input>
-        </li>
-
-        <li>
-          <label>Borders</label>
-          <input
-            type="color"
-            value={'#' + lineColor}
-            onChange={(e) => {
-              onHandleLineChange(e);
-            }}></input>
-        </li>
+        {wallet.map((item) => {
+          return (<li className='walletLi' onClick={()=> {onClickItem(item)}}>
+          <label>{item.name}</label>
+          <label className='walletItemInfo'>{item.value}</label>
+        </li>)
+        })}
       </ul>
       <div className="submenu" style={{ paddingTop: '1rem', fontSize: '15px' }}>Learn more about Tama</div>
     </div>

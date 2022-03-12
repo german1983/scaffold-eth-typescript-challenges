@@ -1,4 +1,4 @@
-import React, { useState, FC, useContext, useEffect } from 'react';
+import React, { useState, FC, useContext, useEffect, useRef } from 'react';
 import './TamaConsole.less';
 import friend1 from '../assets/sample_characters/type1.png';
 import friend2 from '../assets/sample_characters/type2.png';
@@ -12,10 +12,21 @@ const move = ['none', 'move1', 'move2'];
 
 export interface ITamaConsole {
   consoleConfig: Object;
+  tamaCharacter : Object;
+  onWalletChooseType : Function;
+  listenItemUsed : Object | undefined;
+  consoleBackground : string | undefined;
 }
 export const TamaConsole: FC<ITamaConsole> = (props) => {
+    const onWalletChooseType = props.onWalletChooseType;
   const consoleConfig = props.consoleConfig;
+  const tamaCharacter = props.tamaCharacter;
+  const listenItemUsed = props.listenItemUsed;
   const [currMove, setCurrMove] = useState(undefined || Object);
+  const [itemsConsumed, setItemsConsumed] = useState(0);
+
+  const countRef = useRef();
+  countRef.current = itemsConsumed;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,9 +45,11 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(()=>{
+    setItemsConsumed(countRef.current+1);
+    console.log('consuming in console',listenItemUsed);
+  }, [listenItemUsed])
 
-  //   setInterval(()=>{generateRandom()},15000);
-  console.log('PRINTING IN CONSOLE COMPONENT', consoleConfig);
   const [new_screenx,
     new_screeny,
     new_screenw,
@@ -51,12 +64,21 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
     new_button3y,
     new_button3w,] = calcLoc(consoleConfig);
 
+    const onClickEat = ()=>{
+        onWalletChooseType('food');
+    }
+    const onClickTravel = ()=>{
+        onWalletChooseType('travel');
+    }
+    const onClickPlay = ()=>{
+        // onWalletChooseType('Travel');
+    }
   return (
     <div className="ConsoleMain">
       <div
         className="consoleScreen"
         style={{ width: `${new_screenw}px`, height: `${new_screenh}px`, transform: `translate(${new_screenx}px,${new_screeny}px` }}>
-        {/* <div className="layer1" style={{ backgroundImage: `url(${sampleTravel})`, backgroundSize: 'cover' }}></div> */}
+        <div className="layer1" style={{ backgroundImage: `url(${props.consoleBackground})`, backgroundSize: 'cover' }}></div>
         <div className="layer2"></div>
         <div
           className="layer3"
@@ -65,19 +87,20 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
             height: '30%',
             animation: `${currMove.path} ${currMove.time}`,
           }}>
-          <img className="tamaFriend" src={friend2} style={{ 
+          <img className="tamaFriend" src={tamaCharacter.image} style={{ 
   animation: `rotate ${currMove.rotate_speed} infinite`
           }}></img>
+          {listenItemUsed && <img key={itemsConsumed} className = "popupImage" src = {listenItemUsed.uri}></img>}
           <img className = "textCloud" src = {expHolder}></img>
           <img className = "emoji" src = {normalEmoji}></img>
           {/* <div className='emoji expText'>ZZZ</div> */}
         </div>
       </div>
-      <div className='consoleButton' style ={{'width':`${new_button1w}px`,'height':`${new_button1w}px`,'transform' : `translate(${new_button1x}px,${new_button1y}px`}}>
+      <div className='consoleButton' style ={{'width':`${new_button1w}px`,'height':`${new_button1w}px`,'transform' : `translate(${new_button1x}px,${new_button1y}px`}} onClick={()=>{onClickEat()}}>
         </div>
-        <div className='consoleButton' style ={{'width':`${new_button2w}px`,'height':`${new_button2w}px`,'transform' : `translate(${new_button2x}px,${new_button2y}px`}}>
+        <div className='consoleButton' style ={{'width':`${new_button2w}px`,'height':`${new_button2w}px`,'transform' : `translate(${new_button2x}px,${new_button2y}px`}} onClick={()=>{onClickPlay()}}>
         </div>
-        <div className='consoleButton' style ={{'width':`${new_button3w}px`,'height':`${new_button3w}px`,'transform' : `translate(${new_button3x}px,${new_button3y}px`}}>
+        <div className='consoleButton' style ={{'width':`${new_button3w}px`,'height':`${new_button3w}px`,'transform' : `translate(${new_button3x}px,${new_button3y}px`}} onClick={()=>{onClickTravel()}}>
         </div>
     </div>
   );
