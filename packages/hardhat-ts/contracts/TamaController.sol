@@ -33,6 +33,7 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     uint8 scale;
     uint256 xp;
     uint256 hungry;
+    string linkToReturn;
     bool created;
     bool isAlive;
    
@@ -65,14 +66,25 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
 
 
 //functions and getters for creating and feeding a character 
-function createChar(address tokenId, string memory _name) public returns(string memory) {
+function createChar(address tokenId, string memory _name, address importContract, uint256 importId) public returns(string memory) {
   require (TamacharacterId[tokenId].created = !TamacharacterId[tokenId].created, "you've made a character already and named");
   
-  TamacharacterId[tokenId].created = true;
+
   
   TamacharacterId[tokenId].name = _name;
 
+  TamacharacterId[tokenId].blockadded = block.number;
+  TamacharacterId[tokenId].contractAddress = importContract;
+  TamacharacterId[tokenId].tokenId = importId;
+  TamacharacterId[tokenId].xp = 0;
+  TamacharacterId[tokenId].linkToReturn = ERC721(TamacharacterId[tokenId].contractAddress).tokenURI(TamacharacterId[tokenId].tokenId);
+  TamacharacterId[tokenId].created = true;
+  TamacharacterId[tokenId].hungry = 0;
+
+
   return TamacharacterId[tokenId].name;
+
+
 
 }
 
@@ -152,12 +164,18 @@ function getHunger(address tokenId) public view returns (uint256) {
     return super.tokenURI(tokenId);
   }
 
-  function faketokenURI(address contractAddress, uint256 tokenId) public view returns(string memory) {
-
-
-    string memory linkToReturn = ERC721(contractAddress).tokenURI(tokenId);
-    return linkToReturn;
+  function faketokenURI(address tokenId) public view returns(string memory) {
+    
+    return TamacharacterId[tokenId].linkToReturn;
   }
+
+  function getAge(address tokenId) public view returns(uint256) {
+    
+    return(block.number - TamacharacterId[tokenId].blockadded );
+
+
+  }
+  
 
 
 
