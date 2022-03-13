@@ -29,19 +29,24 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
   uint256 feedingblock;
   uint256 hungryblock;
 
-  uint8 hungry;
+  uint256 playblock;
+  uint256 sleepblock;
+  uint256 cleanblock;
+
+ 
 
   struct AssignedTamaFriend {
     string name;
     uint256 blockadded;
     address contractAddress; //contract of the erc721
-    uint256 tokenId; //token id of nft at addr
-    uint8 scale;
+    uint256 tokenId; //token id of nft at addr    
     uint256 xp;
     uint256 hungry;
+    uint256 sleepy;
+    uint256 dirty;
+    uint256 bored;
     string linkToReturn;
-    bool created;
-    bool isAlive;
+    bool created;    
     uint8 length;
   }
 
@@ -82,9 +87,31 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     TamacharacterId[tokenId].linkToReturn = ERC721(TamacharacterId[tokenId].contractAddress).tokenURI(TamacharacterId[tokenId].tokenId);
     TamacharacterId[tokenId].created = true;
     TamacharacterId[tokenId].hungry = 0;
+    TamacharacterId[tokenId].sleepy = 0;
+    TamacharacterId[tokenId].bored = 0;
+    TamacharacterId[tokenId].dirty = 0;
     TamacharacterId[tokenId].length += 1;
 
     return TamacharacterId[tokenId].name;
+  }
+
+  function reviveChar (uint256 tokenId) public returns (string memory) {
+    require(!getAlive(tokenId), "this character is alive - keep it up!");
+
+    //this should consume tama
+  feedingblock=block.number;
+  hungryblock=block.number;
+
+  playblock=block.number;
+  sleepblock=block.number;
+  cleanblock=block.number;
+
+    TamacharacterId[tokenId].hungry = 0;
+    TamacharacterId[tokenId].sleepy = 0;
+    TamacharacterId[tokenId].bored = 0;
+    TamacharacterId[tokenId].dirty = 0;
+
+    return ("your character has been brought back to life! please take better care of your lil buddy.");
   }
 
   function claimstatus(uint256 tokenId) public view returns (bool) {
@@ -108,6 +135,11 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     return 0; // NO FOOD
   }
 
+    function getAlive(uint256 tokenId) public view returns (bool) {
+        return getHunger(tokenId) < 100 && getDirty(tokenId) < 100 &&
+            getBored(tokenId) < 100 && getSleepy(tokenId) < 100;
+    }
+
   function feed(
     uint256 tokenId,
     uint256[] memory consumableId,
@@ -115,7 +147,10 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
   ) public returns (uint256) {
     require(TamacharacterId[tokenId].length > 0, 'you need a character!');
     require(TamacharacterId[tokenId].created, "you don't have a character!");
-    require(TamacharacterId[tokenId].hungry < 2, 'your character died :/ please reinitialize');
+    require(getAlive(tokenId), "R.I.P. LIL BUDDY PLEASE REFRESH");
+    //require(getSleepy(tokenId) < 70, "im too sleepy to eat");
+    require(getDirty(tokenId) < 80, "its to dirty to eat in here!");
+    require(getBored(tokenId) < 90, "im bored! i dont want to eat");  
 
     uint256 foodToConsume = 1;
     for (uint256 i = 0; i < consumableId.length; i++) {
@@ -132,17 +167,61 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     hungryblock = feedingblock + foodToConsume * 100;
 
     TamacharacterId[tokenId].hungry = 0;
+    TamacharacterId[tokenId].sleepy += 2;
+    TamacharacterId[tokenId].bored += 1;
+    TamacharacterId[tokenId].dirty += 3;
+
     TamacharacterId[tokenId].xp += foodToConsume;
     return TamacharacterId[tokenId].xp;
   }
 
   function passTime(uint256 tokenId) public returns (uint256) {
     require(TamacharacterId[tokenId].length > 0, 'you need a character!');
-    require(TamacharacterId[tokenId].hungry < 2, 'your character died :/ please reinitialize');
+    require(getAlive(tokenId), "R.I.P. LIL BUDDY PLEASE REFRESH");
+    require(getHunger(tokenId) < 70, "im hungry! i need to eat before I can play");
+    require(getSleepy(tokenId) < 80, "im tired, i need a nap before i can play");
+    require(getDirty(tokenId) < 90, "im dirty, i can't play like this");
+   
+
+    playblock = block.number;
+
     TamacharacterId[tokenId].hungry += 1;
+    TamacharacterId[tokenId].sleepy += 3;
+    TamacharacterId[tokenId].bored = 0;
+    TamacharacterId[tokenId].dirty += 2;
 
     return (TamacharacterId[tokenId].hungry);
   }
+
+  function sleep(uint256 tokenId) public returns (uint256) {
+    require(getAlive(tokenId), "R.I.P. LIL BUDDY PLEASE REFRESH");
+    //require(getHunger(tokenId) < 70, "im hungry! feed me then i can sleep");
+  
+    require(getDirty(tokenId) < 90, "im dirty! i need to clean up before hopping into bed!");
+    require(getBored(tokenId) < 80, "im feeling restless! lets play before i sleep");
+
+  sleepblock = block.number;
+
+    TamacharacterId[tokenId].hungry += 1;
+    TamacharacterId[tokenId].sleepy = 0;
+    TamacharacterId[tokenId].bored += 3;
+    TamacharacterId[tokenId].dirty += 2;
+  }
+
+  function clean(uint256 tokenId) public returns(uint256) {
+  require(getAlive(tokenId), "R.I.P. LIL BUDDY PLEASE REFRESH");
+  //require(getHunger(tokenId) < 70, "id like to eat before i shower!");
+  require(getSleepy(tokenId) < 90, "i am so tired, can we sleep before showering?");
+  require(getBored(tokenId) < 80, "i want to play before i shower!");
+
+  cleanblock = block.number;
+
+    TamacharacterId[tokenId].hungry = 0;
+    TamacharacterId[tokenId].sleepy += 2;
+    TamacharacterId[tokenId].bored += 1;
+    TamacharacterId[tokenId].dirty += 3;
+  }
+
 
   function getfeednumber() public view returns (uint256) {
     return feedingblock;
@@ -160,8 +239,73 @@ contract TamaController is ERC721('TamaController', 'TAMC'), ERC721Enumerable, E
     if (block.number < hungryblock)
       // We are not hungry yet
       return 0;
-    return TamacharacterId[tokenId].hungry + (block.number - hungryblock) - 1;
+    return TamacharacterId[tokenId].hungry + ((block.number - hungryblock)/10) + 1;
   }
+
+  function getSleepy(uint256 tokenId) public view returns(uint256) {
+    if (block.number < sleepblock)
+    // not tired yet
+    return 0;
+    return TamacharacterId[tokenId].sleepy + ((block.number - sleepblock)/10) + 1;
+  }
+
+    function getBored(uint256 tokenId) public view returns(uint256) {
+    if (block.number < playblock)
+    // not tired yet
+    return 0;
+    return TamacharacterId[tokenId].bored + ((block.number - playblock)/10) + 1;
+  }
+
+    function getDirty(uint256 tokenId) public view returns(uint256) {
+    if (block.number < cleanblock)
+    // not tired yet
+    return 0;
+    return TamacharacterId[tokenId].dirty + ((block.number - cleanblock)/10) + 1;
+  }
+
+  function getStatus(uint256 tokenId) public view returns (string memory) {
+        uint256 mostNeeded = 0;
+        
+        string[4] memory goodStatus = [
+            "(^.^)",
+            ":P",
+            ":D",
+            "(^<^)"
+        ];
+        
+        string memory status = goodStatus[block.number % 4];
+        
+        uint256 _hunger = getHunger(tokenId);
+        uint256 _dirty = getDirty(tokenId);
+        uint256 _bored = getBored(tokenId);
+        uint256 _sleepy = getSleepy(tokenId);
+        
+        if (getAlive(tokenId) == false) {
+            return "RIP LIL BUDDY";
+        }
+        
+        if (_hunger > 70 && _hunger > mostNeeded) {
+            mostNeeded = _hunger;
+            status = "im hungry";
+        }
+        
+        if (_dirty > 70 && _dirty > mostNeeded) {
+            mostNeeded = _dirty;
+            status = "i need to shower";
+        }
+        
+        if (_bored > 70 && _bored > mostNeeded) {
+            mostNeeded = _bored;
+            status = "im bored";
+        }
+        
+        if (_sleepy > 70 && _sleepy > mostNeeded) {
+            mostNeeded = _sleepy;
+            status = "*yawn* im sleepy";
+        }
+        
+        return status;
+    }
 
   function _beforeTokenTransfer(
     address from,
