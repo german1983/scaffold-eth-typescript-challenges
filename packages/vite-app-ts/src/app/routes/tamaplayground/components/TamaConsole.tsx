@@ -7,7 +7,14 @@ import sampleTravel from './travel.jpeg';
 import happyEmoji from '../assets/emojis/happy.png';
 import sadEmoji from '../assets/emojis/sad.png';
 import normalEmoji from '../assets/emojis/normal.png';
+import { useEthersContext } from 'eth-hooks/context';
+import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
+import { useContractLoader, useGasPrice } from 'eth-hooks';
+import { transactor } from 'eth-components/functions';
+import { EthComponentsSettingsContext } from 'eth-components/models';
+import { targetNetworkInfo } from '~~/config/providersConfig';
 import defaultBackground from '../assets/sample_backgrounds/default.jpg';
+
 import { calcLoc, MOVE_UPDATE_INTERVAL, MOVE_DURATION, sampleBackgrounds } from '../utils';
 const move = ['none', 'move1', 'move2'];
 
@@ -20,12 +27,21 @@ export interface ITamaConsole {
   consoleBackground: string | undefined;
 }
 export const TamaConsole: FC<ITamaConsole> = (props) => {
+
+    const ethersContext = useEthersContext();
+  const appContractConfig = useAppContracts();
+  const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);
+
   const onWalletChooseType = props.onWalletChooseType;
   const consoleConfig = props.consoleConfig;
   const tamaCharacter = props.tamaCharacter;
   const listenItemUsed = props.listenItemUsed;
   const [currMove, setCurrMove] = useState(undefined || Object);
   const [itemsConsumed, setItemsConsumed] = useState(0);
+  const gasPrice = useGasPrice(ethersContext.chainId, 'fast');
+  const ethComponentsSettings = useContext(EthComponentsSettingsContext);
+  const tx = transactor(ethComponentsSettings, ethersContext?.signer, gasPrice);
+  const TamaControllerWrite = writeContracts['TamaController'] as TamaController;
 
   const countRef = useRef<any>();
   countRef.current = itemsConsumed;
@@ -75,6 +91,28 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
   const onClickPlay = () => {
     // onWalletChooseType('Travel');
   }
+  const feedCharacter = async () => {
+        if (!tx || !ethersContext.account) return;
+    
+        // var myComponent = ReactDOMServer.renderToString(renderShape(toMint.current))
+        // setButtonText('minting...');
+    
+        await tx(TamaControllerWrite.feed(1,[1],[1]), (update) => {
+          console.log('📡 Transaction Update:', update);
+          if (update && (update.status === 'confirmed' || update.status === 1)) {
+            console.log(' 🍾 Transaction ' + update.hash + ' finished!');
+            console.log(
+              ' ⛽️ ' +
+              update.gasUsed +
+              '/' +
+              (update.gasLimit || update.gas) +
+              ' @ ' +
+              parseFloat(update.gasPrice) / 1000000000 +
+              ' gwei'
+            );
+          }
+        });
+  }
   return (
     <div className="ConsoleMain">
       <div
@@ -99,9 +137,10 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
           {/* <div className='emoji expText'>ZZZ</div> */}
         </div>
       </div>
-      <div className='consoleButton' style={{ 'width': `${new_button1w}px`, 'height': `${new_button1w}px`, 'transform': `translate(${new_button1x}px,${new_button1y}px` }} onClick={() => { onClickEat() }}>
+      <div className='consoleButton' style={{ 'width': `${new_button1w}px`, 'height': `${new_button1w}px`, 'transform': `translate(${new_button1x}px,${new_button1y}px` }} onClick={() => {onClickEat()} }>
       </div>
-      <div className='consoleButton' style={{ 'width': `${new_button2w}px`, 'height': `${new_button2w}px`, 'transform': `translate(${new_button2x}px,${new_button2y}px` }} onClick={() => { onClickPlay() }}>
+      <div className='consoleButton' style={{ 'width': `${new_button2w}px`, 'height': `${new_button2w}px`, 'transform': `translate(${new_button2x}px,${new_button2y}px` }} onClick={async () => { await feedCharacter() }}>
+          FEED
       </div>
       <div className='consoleButton' style={{ 'width': `${new_button3w}px`, 'height': `${new_button3w}px`, 'transform': `translate(${new_button3x}px,${new_button3y}px` }} onClick={() => { onClickTravel() }}>
       </div>
