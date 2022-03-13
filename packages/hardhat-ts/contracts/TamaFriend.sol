@@ -19,7 +19,7 @@ contract TamaFriend is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
   constructor() ERC721('TamaFriend', 'TNFT') {}
 
   function _baseURI() internal view virtual override returns (string memory) {
-    return 'bafybeide66xdnusugxp3y6majfxb5ggiczveamy7et3gp4er3feb5wvkny/metadata/';
+    return 'bafybeifjhzhtg7v72pf7rj63f72aqu7iayieg74yjly2c7ke64yqmhci6i/metadata/';
   }
 
   function _beforeTokenTransfer(

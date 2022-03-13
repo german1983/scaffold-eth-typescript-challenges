@@ -135,12 +135,12 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
           console.log('tokenId', tokenId);
           const tokenURI = await TamaControllerRead.tokenURI(tokenId);
           console.log('tokenURI', tokenURI);
-          const tamaCharacter = await TamaControllerRead.faketokenURI(ethersContext.account);
           const ipfsHash = tokenURI.replace('ipfs://', '');
-          const characterHash = tamaCharacter.replace('https://ipfs.io/ipfs/', '');
           console.log('ipfsHash', ipfsHash);
           const content = await getFromIPFS(ipfsHash);
-          const characterContent = await getFromIPFS(characterHash);
+
+          const tamaCharacter = await TamaControllerRead.faketokenURI(tokenId);
+          const characterContent = await getFromIPFS(tamaCharacter);
 
           try {
             const ipfsObject = JSON.parse(content);

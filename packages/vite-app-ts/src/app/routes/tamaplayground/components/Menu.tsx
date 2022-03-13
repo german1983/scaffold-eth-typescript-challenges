@@ -142,8 +142,8 @@ export const GameMenu: FC<IMenu> = (props) => {
       </div>
       <div className="submenu">Wallet</div>
       <ul className="ul2">
-        {wallet.map((item) => {
-          return (<li className='walletLi' onClick={() => { onClickItem(item) }}>
+        {wallet.map((item, i) => {
+          return (<li className='walletLi' key={'index_' + i} onClick={() => { onClickItem(item) }}>
             <label>{item.name}</label>
             <label className='walletItemInfo'>{item.value}</label>
           </li>)
