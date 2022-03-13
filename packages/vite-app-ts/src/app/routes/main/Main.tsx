@@ -141,6 +141,7 @@ export const Main: FC = () => {
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               yourCurrentBalance={yourCurrentBalance}
               price={ethPrice}
+              account={ethersContext.account}
             />
           </Route>
           <Route path="/tamaplayground">
