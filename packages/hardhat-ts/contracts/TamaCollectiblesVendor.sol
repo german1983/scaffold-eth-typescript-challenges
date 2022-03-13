@@ -40,7 +40,10 @@ contract TamaCollectiblesVendor is IERC1155Receiver, Ownable {
     return initial_tokens;
   }
 
-  function setPrices(uint256[] memory tokensToUpdate, uint256[] memory newPrices) public onlyOwner {
+  /*
+   * TODO: This will have to be secured properly
+   */
+  function setPrices(uint256[] memory tokensToUpdate, uint256[] memory newPrices) public {
     uint256 tokensToUpdateLength = tokensToUpdate.length;
     uint256 newPricesLength = newPrices.length;
     require(tokensToUpdateLength == newPricesLength, 'TamaCollectibleVendor: setPrices - same amount of tokens to update and new prices are required');

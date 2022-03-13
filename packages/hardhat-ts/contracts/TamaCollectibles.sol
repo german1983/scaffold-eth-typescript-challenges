@@ -15,7 +15,7 @@ contract TamaCollectibles is ERC1155, Ownable {
   uint256 public constant SHIELD = 4;
   bool private _isInit;
 
-  constructor() ERC1155('bafybeiedhvz64z2pwcoxcckph6y5323nxfudzqnbqg5ml5kkqunm3qrl24/metadata/') {}
+  constructor() ERC1155('bafybeiai4p7pgyudl265mpl5ptq3itlqvywkda4nz5u4a2xgxdyg3snimu/metadata/') {}
 
   function init(address vendor) public onlyOwner {
     require(!_isInit, 'TamaCollectibles: init - already in initialized');
