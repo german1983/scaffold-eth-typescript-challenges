@@ -135,16 +135,18 @@ export const TamaPlayground: FC<ITamaPlaygroundProps> = (props) => {
           console.log('tokenId', tokenId);
           const tokenURI = await TamaControllerRead.tokenURI(tokenId);
           console.log('tokenURI', tokenURI);
+          const characterStatus = await TamaControllerRead.getStatus(tokenId);
+          console.log('tokenStatus', characterStatus);
           const ipfsHash = tokenURI.replace('ipfs://', '');
           console.log('ipfsHash', ipfsHash);
           const content = await getFromIPFS(ipfsHash);
-
           const tamaCharacter = await TamaControllerRead.faketokenURI(tokenId);
           const characterContent = await getFromIPFS(tamaCharacter);
 
           try {
             const ipfsObject = JSON.parse(content);
-            const characterObject = JSON.parse(characterContent)
+            const characterObject = JSON.parse(characterContent);
+            characterObject['status'] = characterStatus;
             console.log('ipfsObject', ipfsObject);
             collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: ethersContext.account, character: characterObject, ...ipfsObject });
           } catch (e) {

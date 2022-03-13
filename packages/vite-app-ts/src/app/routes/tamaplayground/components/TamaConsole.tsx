@@ -7,8 +7,10 @@ import sampleTravel from './travel.jpeg';
 import happyEmoji from '../assets/emojis/happy.png';
 import sadEmoji from '../assets/emojis/sad.png';
 import normalEmoji from '../assets/emojis/normal.png';
-import { calcLoc, MOVE_UPDATE_INTERVAL, MOVE_DURATION } from '../utils';
+import defaultBackground from '../assets/sample_backgrounds/default.jpg';
+import { calcLoc, MOVE_UPDATE_INTERVAL, MOVE_DURATION, sampleBackgrounds } from '../utils';
 const move = ['none', 'move1', 'move2'];
+
 
 export interface ITamaConsole {
   consoleConfig: Object;
@@ -78,7 +80,8 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
       <div
         className="consoleScreen"
         style={{ width: `${new_screenw}px`, height: `${new_screenh}px`, transform: `translate(${new_screenx}px,${new_screeny}px` }}>
-        <div className="layer1" style={{ backgroundImage: `url(${props.consoleBackground})`, backgroundSize: 'cover' }}></div>
+        <div className="layer1" style={{ backgroundImage: `url(${props.consoleBackground || sampleBackgrounds[tamaCharacter.status] || defaultBackground})`, backgroundSize: 'cover' }}></div>
+        <div className='statusLayer'>STATUS<h2 className='statusText'>{tamaCharacter.status}</h2></div>
         <div className="layer2"></div>
         <div
           className="layer3"
@@ -91,8 +94,8 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
             animation: `rotate ${currMove.rotate_speed} infinite`
           }}></img>
           {listenItemUsed && <img key={itemsConsumed} className="popupImage" src={listenItemUsed.uri}></img>}
-          <img className="textCloud" src={expHolder}></img>
-          <img className="emoji" src={normalEmoji}></img>
+          {/* <img className="textCloud" src={expHolder}></img>
+          <img className="emoji" src={normalEmoji}></img> */}
           {/* <div className='emoji expText'>ZZZ</div> */}
         </div>
       </div>
