@@ -50,7 +50,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironmentExtended) => {
   await tameTokens.approve(tamaDEX.address, ethers.utils.parseEther('100'));
 
   console.log("INIT exchange...")
-  await tamaDEX.init("" + (3 * 10 ** 18), { value: ethers.utils.parseEther('0.03'), gasLimit: 20000000 })
+  await tamaDEX.init("" + (3 * 10 ** 18), { value: ethers.utils.parseEther('0.03') })
 
   await deploy("TamaFriend", {
     from: deployer,

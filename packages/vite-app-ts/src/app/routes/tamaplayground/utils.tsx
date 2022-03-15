@@ -153,7 +153,11 @@ export const sampleWallet = [
   },
 ];
 
-export const sampleBackgrounds = {
+interface SimpleoObject {
+  [key: string]: string
+}
+
+export const sampleBackgrounds: SimpleoObject = {
   'im hungry': hungryIMG,
   'i need to shower': poopIMG,
   'im bored': boredIMG,

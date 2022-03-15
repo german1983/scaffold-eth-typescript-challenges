@@ -12,7 +12,7 @@ const DEBUG = true;
 // -------------------
 // 📡 What chain are your contracts deployed to? 🤚🏽  Set your target frontend network
 // -------------------
-export const targetNetworkInfo: TNetworkInfo = NETWORKS.localhost; // kovan
+export const targetNetworkInfo: TNetworkInfo = NETWORKS.optimismkovan; // kovan
 // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 if (DEBUG) console.log('📡 Connecting to Mainnet Ethereum');
 
@@ -23,17 +23,18 @@ if (DEBUG) console.log('📡 Connecting to Mainnet Ethereum');
 // const mainnetProvider = getDefaultProvider("mainnet", { infura: INFURA_ID, etherscan: ETHERSCAN_KEY, quorum: 1 });
 // const mainnetProvider = new InfuraProvider("mainnet",INFURA_ID);
 // attempt to connect to our own scaffold eth rpc and if that fails fall back to infura...
-const mainnetScaffoldEthProvider = new StaticJsonRpcProvider('https://rpc.scaffoldeth.io:48544');
-const mainnetInfura = new StaticJsonRpcProvider('https://mainnet.infura.io/v3/' + INFURA_ID);
+const mainnetScaffoldEthProvider = new StaticJsonRpcProvider('https://optimism-kovan.infura.io/v3/' + INFURA_ID);// new StaticJsonRpcProvider('https://rpc.scaffoldeth.io:48544');
+// https://optimism-kovan.infura.io/v3/62b154383fe641729f2f4a00da5be9cb
+const mainnetInfura = new StaticJsonRpcProvider('https://optimism-kovan.infura.io/v3/' + INFURA_ID);
 //const mainnetLightPool = new StaticJsonRpcProvider('https://main-light.eth.linkpool.io/');
 export const mainnetProvider =
-  mainnetScaffoldEthProvider && mainnetScaffoldEthProvider._network ? mainnetScaffoldEthProvider : mainnetInfura;
+    mainnetScaffoldEthProvider && mainnetScaffoldEthProvider._network ? mainnetScaffoldEthProvider : mainnetInfura;
 
 // -------------------
 // connecting to local provider
 // -------------------
 // 🏠 Your local provider is usually pointed at your local blockchain
-export const localNetworkInfo = NETWORKS.localhost;
+export const localNetworkInfo = NETWORKS.optimismkovan;
 
 // as you deploy to other networks you can set REACT_APP_PROVIDER=https://dai.poa.network in packages/react-app/.env
 // const localProviderUrl = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER :

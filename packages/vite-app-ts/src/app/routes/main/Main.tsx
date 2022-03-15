@@ -24,7 +24,7 @@ import { mainnetProvider } from '~~/config/providersConfig';
 // import { YourCollectible } from '~~/generated/contract-types';
 import { useAppContracts } from '~~/app/routes/main/hooks/useAppContracts';
 import { EthComponentsSettingsContext } from 'eth-components/models';
-import { TamaDEX, TamaToken } from '~~/generated/contract-types';
+import { TamaCollectibles, TamaCollectiblesVendor, TamaDEX, TamaToken } from '~~/generated/contract-types';
 
 export const DEBUG = false;
 
@@ -41,7 +41,7 @@ export const Main: FC = () => {
   const ethersContext = useEthersContext();
 
   // if no user is found use a burner wallet on localhost as fallback if enabled
-  useBurnerFallback(scaffoldAppProviders, true);
+  useBurnerFallback(scaffoldAppProviders, true); //false
 
   // -----------------------------
   // Contracts use examples
@@ -156,6 +156,12 @@ export const Main: FC = () => {
               mainnetProvider={scaffoldAppProviders.mainnetProvider}
               blockExplorer={scaffoldAppProviders.targetNetwork.blockExplorer}
               tx={tx}
+              yourCollectibleRead={readContracts['TamaCollectibles'] as TamaCollectibles}
+              yourCollectibleWrite={writeContracts['TamaCollectibles'] as TamaCollectibles}
+              tamaTokenRead={readContracts['TamaToken'] as TamaToken}
+              tamaTokenWrite={writeContracts['TamaToken'] as TamaToken}
+              tamaCollectiblesVendorRead={writeContracts['TamaCollectiblesVendor'] as TamaCollectiblesVendor}
+              tamaCollectiblesVendorWrite={writeContracts['TamaCollectiblesVendor'] as TamaCollectiblesVendor}
             />
           </Route>
         </Switch>

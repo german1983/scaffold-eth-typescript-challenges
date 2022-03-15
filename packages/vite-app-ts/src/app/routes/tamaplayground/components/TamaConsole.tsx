@@ -16,6 +16,7 @@ import { targetNetworkInfo } from '~~/config/providersConfig';
 import defaultBackground from '../assets/sample_backgrounds/default.jpg';
 
 import { calcLoc, MOVE_UPDATE_INTERVAL, MOVE_DURATION, sampleBackgrounds } from '../utils';
+import { TamaController } from '~~/generated/contract-types';
 const move = ['none', 'move1', 'move2'];
 
 
@@ -28,7 +29,7 @@ export interface ITamaConsole {
 }
 export const TamaConsole: FC<ITamaConsole> = (props) => {
 
-    const ethersContext = useEthersContext();
+  const ethersContext = useEthersContext();
   const appContractConfig = useAppContracts();
   const writeContracts = useContractLoader(appContractConfig, ethersContext?.signer, targetNetworkInfo.chainId);
 
@@ -92,26 +93,26 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
     // onWalletChooseType('Travel');
   }
   const feedCharacter = async () => {
-        if (!tx || !ethersContext.account) return;
-    
-        // var myComponent = ReactDOMServer.renderToString(renderShape(toMint.current))
-        // setButtonText('minting...');
-    
-        await tx(TamaControllerWrite.feed(1,[1],[1]), (update) => {
-          console.log('📡 Transaction Update:', update);
-          if (update && (update.status === 'confirmed' || update.status === 1)) {
-            console.log(' 🍾 Transaction ' + update.hash + ' finished!');
-            console.log(
-              ' ⛽️ ' +
-              update.gasUsed +
-              '/' +
-              (update.gasLimit || update.gas) +
-              ' @ ' +
-              parseFloat(update.gasPrice) / 1000000000 +
-              ' gwei'
-            );
-          }
-        });
+    if (!tx || !ethersContext.account) return;
+
+    // var myComponent = ReactDOMServer.renderToString(renderShape(toMint.current))
+    // setButtonText('minting...');
+
+    await tx(TamaControllerWrite.feed(1, [1], [1]), (update) => {
+      console.log('📡 Transaction Update:', update);
+      if (update && (update.status === 'confirmed' || update.status === 1)) {
+        console.log(' 🍾 Transaction ' + update.hash + ' finished!');
+        console.log(
+          ' ⛽️ ' +
+          update.gasUsed +
+          '/' +
+          (update.gasLimit || update.gas) +
+          ' @ ' +
+          parseFloat(update.gasPrice) / 1000000000 +
+          ' gwei'
+        );
+      }
+    });
   }
   return (
     <div className="ConsoleMain">
@@ -137,10 +138,10 @@ export const TamaConsole: FC<ITamaConsole> = (props) => {
           {/* <div className='emoji expText'>ZZZ</div> */}
         </div>
       </div>
-      <div className='consoleButton' style={{ 'width': `${new_button1w}px`, 'height': `${new_button1w}px`, 'transform': `translate(${new_button1x}px,${new_button1y}px` }} onClick={() => {onClickEat()} }>
+      <div className='consoleButton' style={{ 'width': `${new_button1w}px`, 'height': `${new_button1w}px`, 'transform': `translate(${new_button1x}px,${new_button1y}px` }} onClick={() => { onClickEat() }}>
       </div>
       <div className='consoleButton' style={{ 'width': `${new_button2w}px`, 'height': `${new_button2w}px`, 'transform': `translate(${new_button2x}px,${new_button2y}px` }} onClick={async () => { await feedCharacter() }}>
-          FEED
+        FEED
       </div>
       <div className='consoleButton' style={{ 'width': `${new_button3w}px`, 'height': `${new_button3w}px`, 'transform': `translate(${new_button3x}px,${new_button3y}px` }} onClick={() => { onClickTravel() }}>
       </div>

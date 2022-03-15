@@ -38,7 +38,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = 'localhost'; //'kovan';
+const defaultNetwork = 'optimismkovan'; //'kovan';
 
 const getMnemonic = () => {
   try {
@@ -76,31 +76,31 @@ const config: HardhatUserConfig = {
       // },
     },
     rinkeby: {
-      url: 'https://rinkeby.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad', // <---- YOUR INFURA ID! (or it won't work)
+      url: 'https://rinkeby.infura.io/v3/dd74cd7fbb08440b9c5db669e97bac0c', // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: getMnemonic(),
       },
     },
     kovan: {
-      url: 'https://kovan.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad', // <---- YOUR INFURA ID! (or it won't work)
+      url: 'https://kovan.infura.io/v3/dd74cd7fbb08440b9c5db669e97bac0c', // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: getMnemonic(),
       },
     },
     mainnet: {
-      url: 'https://mainnet.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad', // <---- YOUR INFURA ID! (or it won't work)
+      url: 'https://mainnet.infura.io/v3/dd74cd7fbb08440b9c5db669e97bac0c', // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: getMnemonic(),
       },
     },
     ropsten: {
-      url: 'https://ropsten.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad', // <---- YOUR INFURA ID! (or it won't work)
+      url: 'https://ropsten.infura.io/v3/dd74cd7fbb08440b9c5db669e97bac0c', // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: getMnemonic(),
       },
     },
     goerli: {
-      url: 'https://goerli.infura.io/v3/460f40a260564ac4a4f4b3fffb032dad', // <---- YOUR INFURA ID! (or it won't work)
+      url: 'https://goerli.infura.io/v3/dd74cd7fbb08440b9c5db669e97bac0c', // <---- YOUR INFURA ID! (or it won't work)
       accounts: {
         mnemonic: getMnemonic(),
       },
@@ -113,12 +113,33 @@ const config: HardhatUserConfig = {
       },
     },
     matic: {
-      url: 'https://rpc-mainnet.maticvigil.com/',
+      url: 'https://polygon-rpc.com/',
       gasPrice: 1000000000,
       accounts: {
         mnemonic: getMnemonic(),
       },
     },
+    // for mainnet
+    optimism: {
+      url: "https://mainnet.optimism.io",
+      accounts: {
+        mnemonic: getMnemonic(),
+      },
+    },
+    // for testnet
+    optimismkovan: {
+      url: "https://kovan.optimism.io",
+      accounts: {
+        mnemonic: getMnemonic(),
+      },
+    },
+    // for the local dev environment
+    optimismlocal: {
+      url: "http://localhost:8545",
+      accounts: {
+        mnemonic: getMnemonic(),
+      },
+    }
   },
   solidity: {
     compilers: [

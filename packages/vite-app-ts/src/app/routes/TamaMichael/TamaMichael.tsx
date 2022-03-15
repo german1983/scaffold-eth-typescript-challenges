@@ -17,6 +17,12 @@ export interface IYourCollectibleProps {
   mainnetProvider: StaticJsonRpcProvider;
   blockExplorer: string;
   tx?: TTransactor;
+  tamaTokenRead: TamaToken;
+  tamaTokenWrite: TamaToken;
+  yourCollectibleRead: TamaCollectibles;
+  yourCollectibleWrite: TamaCollectibles;
+  tamaCollectiblesVendorRead: TamaCollectiblesVendor;
+  tamaCollectiblesVendorWrite: TamaCollectiblesVendor;
 }
 
 const ipfs = create({
@@ -71,7 +77,8 @@ export const TamaMichael: FC<IYourCollectibleProps> = (props: IYourCollectiblePr
   useEffect(() => {
     const updateYourCollectibles = async () => {
       if (ethersContext.account == undefined) return;
-      if (YourCollectibleRead == undefined) return;
+      // const yourCollectibles = props.yourCollectibleRead || YourCollectibleRead;
+      // if (yourCollectibles == undefined) return;
       const collectibleUpdate: any = [];
 
       for (let tokenId = 0; tokenId < 2; tokenId++) {
@@ -114,7 +121,7 @@ export const TamaMichael: FC<IYourCollectibleProps> = (props: IYourCollectiblePr
       setYourCollectibles(collectibleUpdate);
     };
     updateYourCollectibles();
-  }, [ethersContext.account]);
+  }, [ethersContext.account, props.yourCollectibleRead]);
   const amountToBuy = useRef(null);
   return (
     <>
@@ -157,20 +164,20 @@ export const TamaMichael: FC<IYourCollectibleProps> = (props: IYourCollectiblePr
                     console.log("Input by user: ", value);
 
                     const valueInNumber = Number.parseInt(value);
-                    let allowance = await TamaTokenRead.allowance(
+                    let allowance = await props.tamaTokenRead.allowance(
                       ethersContext.account,
-                      TamaCollectiblesVendorWrite.address,
+                      props.tamaCollectiblesVendorWrite.address,
                     );
                     console.log("allowance", allowance);
                     const idBigNumber = ethers.BigNumber.from(id);
-                    const price = await TamaCollectiblesVendorRead.prices(idBigNumber);
+                    const price = await props.tamaCollectiblesVendorRead.prices(idBigNumber);
                     const priceInEther = ethers.utils.formatUnits(BigNumber.from(price), "wei");
                     const totalTama = valueInNumber * Number.parseFloat(priceInEther) * 2;
                     let approveTx;
                     const totalTamaBN = BigNumber.from('' + totalTama);
                     if (allowance.lt(totalTamaBN)) {
                       approveTx = tx(
-                        TamaTokenWrite.approve(TamaCollectiblesVendorWrite.address, totalTamaBN, { gasLimit: 200000 }),
+                        props.tamaTokenWrite.approve(props.tamaCollectiblesVendorWrite.address, totalTamaBN, { gasLimit: 200000 }),
                       );
                     }
 
@@ -180,7 +187,7 @@ export const TamaMichael: FC<IYourCollectibleProps> = (props: IYourCollectiblePr
                       console.log("approveTxResult:", approveTxResult);
                     }
 
-                    const buyTx = await tx(TamaCollectiblesVendorWrite
+                    const buyTx = await tx(props.tamaCollectiblesVendorWrite
                       .buyToken(new Array(idBigNumber), new Array(ethers.BigNumber.from(value))));
 
                     console.log("buyTx: ", buyTx);

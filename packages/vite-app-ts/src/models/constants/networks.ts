@@ -10,7 +10,8 @@ export type TNetworkNames =
   | 'goerli'
   | 'xdai'
   | 'matic'
-  | 'mumbai';
+  | 'mumbai'
+  | 'optimismkovan';
 
 export const NETWORKS: Record<TNetworkNames, TNetworkInfo> = {
   localhost: {
@@ -88,5 +89,15 @@ export const NETWORKS: Record<TNetworkNames, TNetworkInfo> = {
     rpcUrl: 'https://rpc-mumbai.maticvigil.com',
     faucet: 'https://faucet.matic.network/',
     blockExplorer: 'https://mumbai-explorer.matic.today/',
+  },
+  optimismkovan: {
+    name: 'optimismkovan',
+    color: '#92D9FA',
+    chainId: 69,
+    price: 1,
+    gasPrice: 1000000000,
+    rpcUrl: 'https://kovan.optimism.io',
+    faucet: 'https://faucets.chain.link/kovan/',
+    blockExplorer: 'https://kovan-optimistic.etherscan.io',
   },
 };
